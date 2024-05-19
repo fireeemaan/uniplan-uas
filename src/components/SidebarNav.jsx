@@ -3,6 +3,7 @@ import { LuLayoutDashboard } from "react-icons/lu";
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { Typography } from "@mui/material";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   return (
@@ -12,7 +13,9 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       style={{ backgroundColor: selected === title ? "#ededed" : "white" }}
       onClick={() => setSelected(title)}
     >
-      <Link to={to}>{title}</Link>
+      <Link to={to}>
+        <Typography>{title}</Typography>
+      </Link>
     </MenuItem>
   );
 };
@@ -32,7 +35,7 @@ function SidebarNav() {
           ></Item>
           <Item
             title="Profile"
-            to="/profile"
+            to="/ukm"
             icon={<LuLayoutDashboard />}
             selected={selected}
             setSelected={setSelected}

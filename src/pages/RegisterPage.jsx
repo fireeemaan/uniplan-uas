@@ -12,6 +12,9 @@ function RegisterPage() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [nim, setNIM] = useState("");
+  const [phone, setPhone] = useState("");
   const [apiResponse, setApiResponse] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -33,6 +36,18 @@ function RegisterPage() {
     setPassword(event.target.value);
   };
 
+  const handleName = (event) => {
+    setName(event.target.value);
+  };
+
+  const handleNIM = (event) => {
+    setNIM(event.target.value);
+  };
+
+  const handlePhone = (event) => {
+    setPhone(event.target.value);
+  };
+
   const handleSucessResponse = () => {
     setTimeout(() => {
       window.location.href = "/login";
@@ -43,7 +58,11 @@ function RegisterPage() {
     event.preventDefault();
 
     axios
-      .post("http://localhost/pweb-uas/api/register.php", {
+      .post("http://localhost/pweb-uas/api/auth.php", {
+        action: "register",
+        name: name,
+        nim: nim,
+        phone: phone,
         username: username,
         email: email,
         password: password,
@@ -84,6 +103,33 @@ function RegisterPage() {
               onSubmit={handleSubmit}
               className="flex flex-col justify-center gap-3"
             >
+              <TextField
+                onChange={handleName}
+                className="w-full"
+                size="small"
+                id="name"
+                label="Name"
+                variant="outlined"
+                required
+              />
+              <TextField
+                onChange={handleNIM}
+                className="w-full"
+                size="small"
+                id="nim"
+                label="NIM"
+                variant="outlined"
+                required
+              />
+              <TextField
+                onChange={handlePhone}
+                className="w-full"
+                size="small"
+                id="phone"
+                label="Phone Number"
+                variant="outlined"
+                required
+              />
               <TextField
                 onChange={handleUsernameChange}
                 className="w-full"

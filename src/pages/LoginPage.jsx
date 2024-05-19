@@ -31,7 +31,8 @@ function LoginPage() {
     event.preventDefault();
 
     axios
-      .post("http://localhost/pweb-uas/api/login.php", {
+      .post("http://localhost/pweb-uas/api/auth.php", {
+        action: "login",
         username: username,
         password: password,
       })
