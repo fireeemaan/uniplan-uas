@@ -5,15 +5,24 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import React from "react";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Alert, IconButton } from "@mui/material";
+import toast from "react-hot-toast";
 
 function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      setError("");
+    }
+    console.log(error);
+  }, [error]);
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -44,7 +53,7 @@ function LoginPage() {
             "userData",
             JSON.stringify(response.data.data)
           );
-          window.location.href = "/dashboard";
+          window.location.href = "/homepage";
         } else {
           setError(response.data.message);
         }
@@ -56,11 +65,6 @@ function LoginPage() {
   return (
     <>
       <div className="flex flex-col items-center justify-center h-screen bg-slate-100">
-        {error && (
-          <Alert severity="error" variant="outlined" className="mb-5">
-            {error}
-          </Alert>
-        )}
         <Box className="flex flex-col px-4 py-10 rounded-md shadow-lg bg-slate-200">
           <Container>
             <div className="flex flex-col gap-8 bg-slate-200">

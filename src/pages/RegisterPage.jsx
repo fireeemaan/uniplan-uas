@@ -9,43 +9,17 @@ import { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 function RegisterPage() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [nim, setNIM] = useState("");
-  const [phone, setPhone] = useState("");
+  const [inputs, setInputs] = useState({});
   const [apiResponse, setApiResponse] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
-  const timer = null;
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
-  };
-
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
-
-  const handleName = (event) => {
-    setName(event.target.value);
-  };
-
-  const handleNIM = (event) => {
-    setNIM(event.target.value);
-  };
-
-  const handlePhone = (event) => {
-    setPhone(event.target.value);
+  const handleInputChange = (event) => {
+    const { id, value } = event.target;
+    setInputs((values) => ({ ...values, [id]: value }));
   };
 
   const handleSucessResponse = () => {
@@ -57,15 +31,17 @@ function RegisterPage() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    console.log(inputs.name);
+
     axios
       .post("http://localhost/pweb-uas/api/auth.php", {
         action: "register",
-        name: name,
-        nim: nim,
-        phone: phone,
-        username: username,
-        email: email,
-        password: password,
+        name: inputs.name,
+        nim: inputs.nim,
+        phone: inputs.phone,
+        username: inputs.username,
+        email: inputs.email,
+        password: inputs.password,
       })
       .then((response) => {
         console.log(response.data);
@@ -104,7 +80,7 @@ function RegisterPage() {
               className="flex flex-col justify-center gap-3"
             >
               <TextField
-                onChange={handleName}
+                onChange={handleInputChange}
                 className="w-full"
                 size="small"
                 id="name"
@@ -113,7 +89,7 @@ function RegisterPage() {
                 required
               />
               <TextField
-                onChange={handleNIM}
+                onChange={handleInputChange}
                 className="w-full"
                 size="small"
                 id="nim"
@@ -122,7 +98,7 @@ function RegisterPage() {
                 required
               />
               <TextField
-                onChange={handlePhone}
+                onChange={handleInputChange}
                 className="w-full"
                 size="small"
                 id="phone"
@@ -131,7 +107,7 @@ function RegisterPage() {
                 required
               />
               <TextField
-                onChange={handleUsernameChange}
+                onChange={handleInputChange}
                 className="w-full"
                 size="small"
                 id="username"
@@ -140,7 +116,7 @@ function RegisterPage() {
                 required
               />
               <TextField
-                onChange={handleEmailChange}
+                onChange={handleInputChange}
                 size="small"
                 id="email"
                 type="email"
@@ -149,7 +125,7 @@ function RegisterPage() {
                 required
               />
               <TextField
-                onChange={handlePasswordChange}
+                onChange={handleInputChange}
                 size="small"
                 id="password"
                 type={showPassword ? "text" : "password"}
