@@ -39,6 +39,18 @@ function validateUsername($username)
     return true;
 }
 
+function validateNIM($nim)
+{
+    global $conn;
+    $sql = "SELECT * FROM users WHERE nim = '$nim'";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        return false;
+    }
+    return true;
+
+}
+
 function saveRegister($nama, $nim, $no_hp, $username, $password, $email)
 {
     global $conn;
