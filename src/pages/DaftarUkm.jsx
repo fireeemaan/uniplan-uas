@@ -2,18 +2,26 @@ import React from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import DefaultImage from "../assets/img-placeholder.svg";
 import Navbar from "../components/Navbar";
 
 const DaftarUkm = () => {
+  const navigate = useNavigate();
+
   const [ukm, setUkm] = useState([]);
-  const ukmData = JSON.parse(sessionStorage.getItem("ukm"));
   const userData = JSON.parse(sessionStorage.getItem("userData"));
   const name = userData?.userData.nama;
   const id = userData?.userData.id;
   const id_roles = userData?.userData.id_roles;
   let action = "getAll";
+
+  useEffect(() => {
+    const loggedIn = sessionStorage.getItem("loggedIn");
+    if (!loggedIn) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const fetchUKM = async () => {
@@ -27,24 +35,20 @@ const DaftarUkm = () => {
             },
           }
         );
+        console.log(response.data.data.ukmormawa);
         setUkm(response.data.data.ukmormawa);
-        sessionStorage.setItem(
-          "ukm",
-          JSON.stringify(response.data.data.ukmormawa)
-        );
         console.log(id_roles);
       } catch (error) {
         console.error(error);
       }
     };
     if (id_roles === "1") {
-      action = "getByUser";
+      action = "getAll";
     } else if (id_roles === "2") {
       action = "getAll";
     }
     fetchUKM();
-
-    fetchUKM();
+    sessionStorage.removeItem("ukm");
   }, []);
 
   return (

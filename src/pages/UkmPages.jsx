@@ -1,27 +1,203 @@
-import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Tabs, Tab, Button } from "@mui/material";
+import axios from "axios";
+import classNames from "classnames";
+import TableData from "../components/TableData";
+import { FaAngleLeft } from "react-icons/fa";
+import { IoPerson } from "react-icons/io5";
+import Navbar from "../components/Navbar";
+import AddJadwal from "./pengurus/AddJadwal";
+
+const userData = JSON.parse(sessionStorage.getItem("userData"));
+const id = userData?.userData.id;
+let ukmName = "";
+let jabatan = "";
+let abbrevation = "";
+let idUkm = "";
+
+const DaftarAnggota = ({ idUkm }) => {
+  const [anggota, setAnggota] = useState([]);
+
+  useEffect(() => {
+    const fetchAnggota = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost/pweb-uas/api/ukmormawa.php",
+          {
+            params: {
+              action: "getAnggota",
+              id_ukm: idUkm,
+            },
+          }
+        );
+        console.log(response.data.data.anggota);
+        setAnggota(response.data.data.anggota);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchAnggota();
+  }, [idUkm]);
+
+  return (
+    <div className="grid grid-cols-4 grid-flow-row w-full justify-center mt-5">
+      {anggota.length > 0 ? (
+        anggota.map((anggota) => (
+          <div
+            key={anggota.id}
+            className="flex flex-row p-3 border border-black/10 shadow-lg w-full rounded-lg items-center hover:bg-gray-400/5 ease-in-out transition-all"
+          >
+            <div className="flex rounded-full bg-gray-200 size-12 justify-center items-center">
+              <IoPerson className="text-gray-400 text-2xl" />
+            </div>
+            <div className="w-full">
+              <div className="flex flex-row items-center justify-between w-full">
+                <h1 className="text-sm font-bold ml-3">{anggota.nama}</h1>
+                <h1 className="text-xs ml-3 font-bold">{anggota.jabatan}</h1>
+              </div>
+              <h1 className="text-xs ml-3 text-gray-600">{anggota.nim}</h1>
+              <h1 className="text-xs ml-3 text-gray-500">{anggota.prodi}</h1>
+            </div>
+          </div>
+        ))
+      ) : (
+        <h1 className="text-center col-span-4 font-bold text-2xl">
+          Tidak Ada Anggota
+        </h1>
+      )}
+      {}
+    </div>
+  );
+};
 
 const UkmPages = () => {
+  const [activeButton, setActiveButton] = useState("home");
+  const [ukmUser, setUkmUser] = useState([]);
+  const [ukm, setUkm] = useState([]);
   const { name } = useParams();
 
-  const ukmData = JSON.parse(sessionStorage.getItem("ukm"));
-  let ukmName = "";
+  const navigate = useNavigate();
 
-  const findUkm = ukmData.find((ukm) => ukm.singkatan.toLowerCase() === name);
+  const handleButtonClick = (buttonName) => {
+    setActiveButton(buttonName);
+  };
+
+  // const ukmData = JSON.parse(sessionStorage.getItem("ukm"));
+
+  const findUkm = ukmUser.find((ukm) => ukm.singkatan.toLowerCase() === name);
 
   if (findUkm) {
-    ukmName = findUkm.singkatan;
+    console.log(findUkm.id);
+    idUkm = findUkm.id;
+    abbrevation = findUkm.singkatan;
+    ukmName = findUkm.nama;
+    jabatan = findUkm.jabatan;
   }
+  // console.log(idUkm);
+  // console.log(jabatan);
+  // console.log(ukmName);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const loggedIn = sessionStorage.getItem("loggedIn");
+    if (!loggedIn) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  const handleBack = () => {
+    navigate(-1);
+  };
+
+  useEffect(() => {
+    const fetchUKM_User = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost/pweb-uas/api/ukmormawa.php",
+          {
+            params: {
+              action: "getAll",
+              id_user: id,
+            },
+          }
+        );
+        console.log(response.data);
+        setUkm(response.data.data.ukmormawa);
+        setUkmUser(response.data.data.ukm_user);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUKM_User();
+  }, []);
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <div className="bg-slate-200 h-full m-5">
-        <h1 className="text-4xl font-semibold text-center text-slate-900">
-          {ukmName}
-        </h1>
+    <>
+      <Navbar type="home" name={userData.userData.nama} />
+      <div className="flex flex-col mt-14 items-center mb-12 justify-center w-screen h-screen p-10">
+        <div className="flex flex-col bg-white w-full h-screen items-center mt-10">
+          <div className="w-full">
+            <Button
+              className=""
+              variant="contained"
+              sx={{ padding: "4px 8px" }}
+              onClick={handleBack}
+            >
+              <FaAngleLeft />
+              <h1>Back</h1>
+            </Button>
+          </div>
+
+          <h1 className="text-2xl font-bold text-center">{ukmName}</h1>
+          <div className="grid grid-cols-6 text-xl gap-4 font-bold mx-24 mt-8 w-full mb-5">
+            <Button
+              variant={activeButton === "home" ? "contained" : "outlined"}
+              className="col-start-3"
+              onClick={() => handleButtonClick("home")}
+              sx={{
+                borderRadius: 3,
+                padding: "3px 3px",
+                textTransform: "none",
+              }}
+            >
+              Home
+            </Button>
+            <Button
+              variant={activeButton === "anggota" ? "contained" : "outlined"}
+              className="col-start-4"
+              onClick={() => handleButtonClick("anggota")}
+              sx={{
+                borderRadius: 3,
+                padding: "3px 3px",
+                textTransform: "none",
+              }}
+            >
+              Daftar Anggota
+            </Button>
+          </div>
+          {activeButton === "home" && (
+            <div>
+              {jabatan.toLowerCase() === "pengurus" && (
+                <div className="flex flex-row justify-end">
+                  <Button
+                    variant="contained"
+                    onClick={() => handleButtonClick("tambah")}
+                  >
+                    Tambah
+                  </Button>
+                </div>
+              )}
+
+              <div className="flex flex-col shadow-lg border border-black/10 rounded-xl mt-3">
+                <TableData ukmName={abbrevation} />
+              </div>
+            </div>
+          )}
+          {activeButton === "anggota" && <DaftarAnggota idUkm={idUkm} />}
+          {activeButton === "tambah" && <AddJadwal id_ukmormawa={idUkm} />}
+          {/* <AddJadwal id_ukmormawa={idUkm} /> */}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

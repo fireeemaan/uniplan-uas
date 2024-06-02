@@ -7,7 +7,7 @@ import { Popover } from "@mui/material";
 
 const LandingPage = () => {
   return (
-    <div className="fixed flex items-center justify-between w-full px-10 py-3 shadow-md bg-slate-200">
+    <div className="fixed flex z-50 top-0 items-center justify-between w-full px-10 py-3 shadow-md bg-slate-200">
       <h1>Logo Here</h1>
       <div className="flex flex-row gap-2 font-semibold">
         <a
@@ -41,7 +41,7 @@ const HomePage = ({ name }) => {
   const open = Boolean(anchorEl);
 
   return (
-    <div className="fixed flex items-center justify-between w-full px-10 py-1 shadow-md bg-slate-200">
+    <div className="fixed flex z-50 top-0 items-center justify-between w-full px-10 py-1 shadow-md bg-slate-200">
       <h1>Logo Here</h1>
       <div className="navmenu flex flex-row gap-5 justify-center items-center">
         <Link to="/homepage">Beranda</Link>
