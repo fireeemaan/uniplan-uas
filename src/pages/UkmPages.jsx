@@ -239,6 +239,7 @@ const UkmPages = () => {
             <EditJadwal
               setApiResponse={setApiResponse}
               setActiveButton={setActiveButton}
+              jabatan={jabatan}
             />
           )}
           {/* <AddJadwal id_ukmormawa={idUkm} /> */}

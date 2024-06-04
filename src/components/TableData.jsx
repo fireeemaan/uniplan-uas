@@ -18,7 +18,7 @@ import dayjs from "dayjs";
 import { useParams, useNavigate } from "react-router-dom";
 import { useConfirm } from "material-ui-confirm";
 
-const Row = ({ props, fetchData, setApiResponse }) => {
+const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
   const { row } = props;
   const [open, setOpen] = useState(false);
 
@@ -85,18 +85,20 @@ const Row = ({ props, fetchData, setApiResponse }) => {
           {formatTime(row.start)} - {row.end ? formatTime(row.end) : "Selesai"}
         </TableCell>
         <TableCell align="right">
-          <Stack
-            direction="row"
-            spacing={1}
-            divider={<Divider orientation="vertical" flexItem />}
-          >
-            <IconButton color="error" onClick={() => handleDelete(row.id)}>
-              <MdDelete />
-            </IconButton>
-            <IconButton color="info" onClick={() => handleEdit(row.id)}>
-              <MdEdit />
-            </IconButton>
-          </Stack>
+          {jabatan === "Pengurus" ? (
+            <Stack
+              direction="row"
+              spacing={1}
+              divider={<Divider orientation="vertical" flexItem />}
+            >
+              <IconButton color="error" onClick={() => handleDelete(row.id)}>
+                <MdDelete />
+              </IconButton>
+              <IconButton color="info" onClick={() => handleEdit(row.id)}>
+                <MdEdit />
+              </IconButton>
+            </Stack>
+          ) : null}
         </TableCell>
       </TableRow>
       <TableRow>
@@ -123,9 +125,11 @@ const Row = ({ props, fetchData, setApiResponse }) => {
   );
 };
 
-const TableData = ({ setApiResponse }) => {
+const TableData = ({ setApiResponse, jabatan }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   const { name } = useParams();
 
@@ -179,6 +183,7 @@ const TableData = ({ setApiResponse }) => {
                   props={{ row }}
                   fetchData={fetchData}
                   setApiResponse={setApiResponse}
+                  jabatan={jabatan}
                 />
               ))
           ) : (

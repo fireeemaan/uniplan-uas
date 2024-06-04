@@ -14,7 +14,7 @@ import { useParams, useNavigate } from "react-router-dom";
 const userData = JSON.parse(sessionStorage.getItem("userData"));
 const id_user = userData?.userData.id;
 
-const EditJadwal = ({ setApiResponse, setActiveButton }) => {
+const EditJadwal = ({ setApiResponse, setActiveButton, jabatan }) => {
   const [inputs, setInputs] = useState({});
   const [kegiatan, setKegiatan] = useState({});
 
@@ -37,6 +37,13 @@ const EditJadwal = ({ setApiResponse, setActiveButton }) => {
     const dtString = `1970-01-01T${formattedTime}`;
     return dayjs(dtString);
   }
+
+  useEffect(() => {
+    if (!jabatan || jabatan !== "Pengurus") {
+      navigate(`/ukm-ormawa/${name}`);
+      setActiveButton("home");
+    }
+  });
 
   useEffect(() => {
     console.log(idKegiatan);
