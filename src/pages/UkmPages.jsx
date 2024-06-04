@@ -8,9 +8,12 @@ import { FaAngleLeft } from "react-icons/fa";
 import { IoPerson } from "react-icons/io5";
 import Navbar from "../components/Navbar";
 import AddJadwal from "./pengurus/AddJadwal";
+import toast from "react-hot-toast";
+import EditJadwal from "./pengurus/EditJadwal";
 
 const userData = JSON.parse(sessionStorage.getItem("userData"));
 const id = userData?.userData.id;
+const id_role = userData?.userData.id_roles;
 let ukmName = "";
 let jabatan = "";
 let abbrevation = "";
@@ -31,7 +34,7 @@ const DaftarAnggota = ({ idUkm }) => {
             },
           }
         );
-        console.log(response.data.data.anggota);
+        console.log(response.data);
         setAnggota(response.data.data.anggota);
       } catch (error) {
         console.error(error);
@@ -73,22 +76,35 @@ const DaftarAnggota = ({ idUkm }) => {
 
 const UkmPages = () => {
   const [activeButton, setActiveButton] = useState("home");
+  const [isEdited, setIsEdited] = useState(false);
   const [ukmUser, setUkmUser] = useState([]);
   const [ukm, setUkm] = useState([]);
-  const { name } = useParams();
+  const { name, idKegiatan } = useParams();
+
+  const [apiResponse, setApiResponse] = useState({});
 
   const navigate = useNavigate();
 
   const handleButtonClick = (buttonName) => {
     setActiveButton(buttonName);
+    navigate(`/ukm-ormawa/${name}`);
   };
 
   // const ukmData = JSON.parse(sessionStorage.getItem("ukm"));
+  console.log(id_role);
+  let findUkm;
+  if (id_role === "1") {
+    findUkm = ukmUser.find((ukm) => ukm.singkatan.toLowerCase() === name);
+  }
+  if (id_role === "2") {
+    console.log("Hello");
+    findUkm = ukm.find((ukm) => ukm.singkatan.toLowerCase() === name);
+  }
 
-  const findUkm = ukmUser.find((ukm) => ukm.singkatan.toLowerCase() === name);
+  // console.log(findUkm);
 
   if (findUkm) {
-    console.log(findUkm.id);
+    console.log(findUkm.jabatan);
     idUkm = findUkm.id;
     abbrevation = findUkm.singkatan;
     ukmName = findUkm.nama;
@@ -98,6 +114,10 @@ const UkmPages = () => {
   // console.log(jabatan);
   // console.log(ukmName);
 
+  const handleBack = () => {
+    navigate("/ukm-ormawa");
+  };
+
   useEffect(() => {
     const loggedIn = sessionStorage.getItem("loggedIn");
     if (!loggedIn) {
@@ -105,9 +125,24 @@ const UkmPages = () => {
     }
   }, [navigate]);
 
-  const handleBack = () => {
-    navigate(-1);
-  };
+  useEffect(() => {
+    if (idKegiatan) {
+      setActiveButton("edit");
+    }
+  }, [idKegiatan]);
+
+  useEffect(() => {
+    console.log(apiResponse);
+    if (Object.keys(apiResponse).length > 0) {
+      console.log(apiResponse.status);
+      if (apiResponse.status === "success") {
+        toast.success(apiResponse.message);
+      } else if (apiResponse.status === "error") {
+        toast.error(apiResponse.message);
+      }
+      setApiResponse({});
+    }
+  });
 
   useEffect(() => {
     const fetchUKM_User = async () => {
@@ -133,8 +168,8 @@ const UkmPages = () => {
   return (
     <>
       <Navbar type="home" name={userData.userData.nama} />
-      <div className="flex flex-col mt-14 items-center mb-12 justify-center w-screen h-screen p-10">
-        <div className="flex flex-col bg-white w-full h-screen items-center mt-10">
+      <div className="flex flex-col mt-4 items-center justify-center w-full p-10">
+        <div className="flex flex-col bg-white w-full items-center mt-10">
           <div className="w-full">
             <Button
               className=""
@@ -176,7 +211,7 @@ const UkmPages = () => {
           </div>
           {activeButton === "home" && (
             <div>
-              {jabatan.toLowerCase() === "pengurus" && (
+              {jabatan != null && jabatan.toLowerCase() === "pengurus" && (
                 <div className="flex flex-row justify-end">
                   <Button
                     variant="contained"
@@ -188,12 +223,24 @@ const UkmPages = () => {
               )}
 
               <div className="flex flex-col shadow-lg border border-black/10 rounded-xl mt-3">
-                <TableData ukmName={abbrevation} />
+                <TableData jabatan={jabatan} setApiResponse={setApiResponse} />
               </div>
             </div>
           )}
           {activeButton === "anggota" && <DaftarAnggota idUkm={idUkm} />}
-          {activeButton === "tambah" && <AddJadwal id_ukmormawa={idUkm} />}
+          {activeButton === "tambah" && (
+            <AddJadwal
+              id_ukmormawa={idUkm}
+              setApiResponse={setApiResponse}
+              setActiveButton={setActiveButton}
+            />
+          )}
+          {activeButton === "edit" && (
+            <EditJadwal
+              setApiResponse={setApiResponse}
+              setActiveButton={setActiveButton}
+            />
+          )}
           {/* <AddJadwal id_ukmormawa={idUkm} /> */}
         </div>
       </div>

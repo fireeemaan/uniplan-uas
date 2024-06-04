@@ -2,6 +2,7 @@
 import "./App.css";
 import RoutesLink from "./routes/RoutesLink";
 import { Toaster } from "react-hot-toast";
+import { ConfirmProvider } from "material-ui-confirm";
 
 // import axios from "axios";
 // import { useEffect } from "react";
@@ -9,10 +10,16 @@ import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
-    <div>
-      <Toaster position="top-right" reverseOrder={false} />
-      <RoutesLink />
-    </div>
+    <ConfirmProvider>
+      <div class="maincontainer">
+        <Toaster
+          position="top-right"
+          reverseOrder={false}
+          containerStyle={{ top: 80 }}
+        />
+        <RoutesLink />
+      </div>
+    </ConfirmProvider>
   );
 }
 

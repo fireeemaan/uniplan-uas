@@ -10,54 +10,79 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import dayjs from "dayjs";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import { Icon, IconButton } from "@mui/material";
-import Checkbox from "@mui/material/Checkbox";
 
 const userData = JSON.parse(sessionStorage.getItem("userData"));
 const id_user = userData?.userData.id;
 
-const AddJadwal = ({ id_ukmormawa, setApiResponse, setActiveButton }) => {
+const EditJadwal = ({ setApiResponse, setActiveButton }) => {
   const [inputs, setInputs] = useState({});
+  const [kegiatan, setKegiatan] = useState({});
 
-  const [noTimeEnd, setNoTimeEnd] = useState(false);
-
-  const { name } = useParams();
   const navigate = useNavigate();
+
+  const { idKegiatan, name } = useParams();
 
   const handleInputChange = (event, field) => {
     if (field) {
-      setInputs((values) => ({ ...values, [field]: event }));
-      // console.log(inputs);
+      setKegiatan((values) => ({ ...values, [field]: event }));
     } else {
       const { id, value } = event.target;
-      setInputs((values) => ({ ...values, [id]: value }));
+      setKegiatan((values) => ({ ...values, [id]: value }));
     }
+    console.log(kegiatan);
   };
 
-  const handleCheckbox = (event) => {
-    setNoTimeEnd(event.target.checked);
-  };
+  function parseTimeString(time) {
+    const formattedTime = dayjs(time, "HH:mm:ss").format("HH:mm");
+    const dtString = `1970-01-01T${formattedTime}`;
+    return dayjs(dtString);
+  }
+
+  useEffect(() => {
+    console.log(idKegiatan);
+
+    axios
+      .get("http://localhost/pweb-uas/api/kegiatan.php", {
+        params: {
+          action: "getById",
+          id_kegiatan: idKegiatan,
+        },
+      })
+      .then((response) => {
+        if (response.data.status === "error") {
+          setApiResponse(response.data);
+          setActiveButton("home");
+          navigate(`/ukm-ormawa/${name}`);
+        } else {
+          setKegiatan(response.data.data.kegiatan);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
     // TODO : Fix Waktu Selesai jika kosong terbaca 00.00
-    console.log(inputs);
+
     axios
       .post("http://localhost/pweb-uas/api/kegiatan.php", {
-        action: "addJadwal",
-        namaKegiatan: inputs.kegiatan_name,
-        tempat: inputs.tempat,
-        tanggal: inputs.date ? dayjs(inputs.date).format("YYYY-MM-DD") : null,
-        waktuMulai: inputs.time_start
-          ? dayjs(inputs.time_start).format("HH:mm")
-          : null,
-        waktuSelesai: inputs.time_end
-          ? dayjs(inputs.time_end).format("HH:mm")
-          : null,
-        deskripsi: inputs.deskripsi,
-        id_ukmormawa: id_ukmormawa,
-        id_user: id_user,
+        action: "updateJadwal",
+        namaKegiatan: kegiatan.nama_kegiatan,
+        tempat: kegiatan.tempat,
+        tanggal: kegiatan.date
+          ? dayjs(kegiatan.date).format("YYYY-MM-DD")
+          : kegiatan.tanggal,
+        waktuMulai: kegiatan.time_start
+          ? dayjs(kegiatan.time_start).format("HH:mm")
+          : kegiatan.start,
+        waktuSelesai: kegiatan.time_end
+          ? dayjs(kegiatan.time_end).format("HH:mm")
+          : kegiatan.end,
+        deskripsi: kegiatan.deskripsi,
+        id_kegiatan: idKegiatan,
       })
       .then((response) => {
         console.log(response.data);
@@ -74,18 +99,22 @@ const AddJadwal = ({ id_ukmormawa, setApiResponse, setActiveButton }) => {
 
   return (
     <Box className="flex flex-col gap-2 bg-white p-5 rounded-lg shadow-lg border border-black/10">
-      <h1 className="font-bold">Tambah Jadwal</h1>
+      <h1 className="font-bold">Edit Jadwal</h1>
       <form className="flex flex-col gap-5">
         <TextField
           size="small"
-          id="kegiatan_name"
+          id="nama_kegiatan"
           label="Nama Kegiatan"
+          InputLabelProps={{ shrink: true }}
+          value={kegiatan && kegiatan.nama_kegiatan}
           onChange={handleInputChange}
         />
         <TextField
           size="small"
           id="tempat"
           label="Tempat"
+          value={kegiatan.tempat}
+          InputLabelProps={{ shrink: true }}
           onChange={handleInputChange}
         />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -93,33 +122,35 @@ const AddJadwal = ({ id_ukmormawa, setApiResponse, setActiveButton }) => {
             size="small"
             id="date"
             label="Tanggal"
+            value={dayjs(kegiatan.tanggal)}
             onChange={(value) => handleInputChange(value, "date")}
           />
-          <div className="flex flex-row items-center gap-5 justify-center ">
+          <div className="flex flex-row items-center gap-5">
             <TimePicker
               size="small"
               id="time_start"
               label="Waktu Mulai"
               ampm={false}
+              value={parseTimeString(kegiatan.start)}
               onChange={(value) => handleInputChange(value, "time_start")}
             />
             -
             <TimePicker
               size="small"
               id="time_end"
-              label={noTimeEnd ? "Selesai" : "Waktu Selesai"}
+              label="Waktu Selesai"
               ampm={false}
-              minTime={inputs.time_start ? inputs.time_start : null}
+              value={parseTimeString(kegiatan.end)}
               onChange={(value) => handleInputChange(value, "time_end")}
-              disabled={noTimeEnd}
             />
-            <Checkbox onChange={handleCheckbox}></Checkbox>
           </div>
         </LocalizationProvider>
         <TextField
           size="small"
           id="deskripsi"
           label="Keterangan"
+          value={kegiatan.deskripsi}
+          InputLabelProps={{ shrink: true }}
           multiline={true}
           onChange={handleInputChange}
         />
@@ -131,4 +162,4 @@ const AddJadwal = ({ id_ukmormawa, setApiResponse, setActiveButton }) => {
   );
 };
 
-export default AddJadwal;
+export default EditJadwal;
