@@ -70,14 +70,18 @@ function getById($id)
 function getByName($ukmName)
 {
     global $conn;
-    $sql = "SELECT k.* FROM kegiatan k JOIN ukmormawa u ON k.id_ukmormawa = u.id WHERE u.singkatan = ?";
+    $sql = "SELECT k.* FROM kegiatan k JOIN ukmormawa u ON k.id_ukmormawa = u.id WHERE u.singkatan = ? AND deleted_at IS NULL";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('s', $ukmName);
     $stmt->execute();
     $result = $stmt->get_result();
     $result = $result->fetch_all(MYSQLI_ASSOC);
 
-    echo createResponse('success', 'Data retrieved successfully', ['jadwal' => $result]);
+    $sql_dosen = "SELECT * FROM dosen";
+    $result_dosen = $conn->query($sql_dosen);
+    $dosen = $result_dosen->fetch_all(MYSQLI_ASSOC);
+
+    echo createResponse('success', 'Data retrieved successfully', ['jadwal' => $result, 'dosen' => $dosen]);
 }
 
 function saveJadwal($id_ukmormawa, $nama_kegiatan, $tanggal, $waktu_mulai, $waktu_selesai, $tempat, $deskripsi, $created_by)
