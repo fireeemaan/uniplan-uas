@@ -15,6 +15,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import Checkbox from "@mui/material/Checkbox";
 
 const AddPeminjaman = ({ id_ukmormawa, setApiResponse, setActiveButton }) => {
+  const userData = JSON.parse(sessionStorage.getItem("userData"));
+  const id = userData?.userData.id;
   const [inputs, setInputs] = useState({});
   const [kegiatan, setKegiatan] = useState([]);
   const [dosen, setDosen] = useState([]);
@@ -82,6 +84,28 @@ const AddPeminjaman = ({ id_ukmormawa, setApiResponse, setActiveButton }) => {
     event.preventDefault();
 
     console.log(inputs);
+
+    axios
+      .post("http://localhost/pweb-uas/api/peminjaman.php", {
+        action: "addPeminjaman",
+        hal: inputs.hal,
+        tanggal: inputs.date ? dayjs(inputs.date).format("YYYY-MM-DD") : null,
+        id_kegiatan: inputs.kegiatan,
+        id_dosen: inputs.dosen,
+        id_ukmormawa: id_ukmormawa,
+        id_user: id,
+      })
+      .then((response) => {
+        console.log(response.data);
+        setApiResponse(response.data);
+        if (response.data.status === "success") {
+          setActiveButton("peminjaman");
+          navigate(`/ukm-ormawa/${name}`);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
 
     // TODO : Add API to save data
 

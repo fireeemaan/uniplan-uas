@@ -33,8 +33,9 @@ const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
 
   const { name } = useParams();
 
+  // TODO : Add This Edit
   const handleEdit = (id) => {
-    navigate(`/ukm-ormawa/${name}/jadwal/${id}/edit`);
+    navigate(`/ukm-ormawa/${name}/peminjaman/${id}/edit`);
   };
 
   const handleDelete = (id) => {
