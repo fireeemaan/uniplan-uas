@@ -10,6 +10,8 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
+import Typography from "@mui/material/Typography";
+import Tooltip from "@mui/material/Tooltip";
 import TableRow from "@mui/material/TableRow";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -76,7 +78,16 @@ const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell align="left">{row.nama_kegiatan}</TableCell>
+        <TableCell align="left" sx={{ maxWidth: 200 }}>
+          {row.nama_kegiatan.length > 15 ? (
+            <Tooltip title={row.nama_kegiatan}>
+              <Typography noWrap>{row.nama_kegiatan}</Typography>
+            </Tooltip>
+          ) : (
+            <Typography noWrap>{row.nama_kegiatan}</Typography>
+          )}
+        </TableCell>
+
         <TableCell align="left">
           {dayjs(row.tanggal).format("d MMMM YYYY")}
         </TableCell>
@@ -144,7 +155,7 @@ const TableData = ({ setApiResponse, jabatan }) => {
           },
         }
       );
-      console.log(response.data.data.jadwal);
+      // console.log(response.data.data);
       setData(response.data.data.jadwal);
       setLoading(false);
     } catch (error) {

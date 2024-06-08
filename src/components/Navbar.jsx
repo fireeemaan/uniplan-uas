@@ -57,7 +57,7 @@ const HomePage = ({ name }) => {
       <div className="flex flex-row items-center justify-center gap-2 font-semibold">
         <div className="flex flex-row items-center justify-center gap-2 py-2 text-lg">
           <h1>
-            Hello, <span className="font-bold">{name}</span>
+            Halo, <span className="font-bold">{name}</span>
           </h1>
           <button
             className="flex flex-row items-center justify-center gap-1"

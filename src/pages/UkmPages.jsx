@@ -7,10 +7,11 @@ import TableData from "../components/TableData";
 import { FaAngleLeft } from "react-icons/fa";
 import { IoPerson } from "react-icons/io5";
 import Navbar from "../components/Navbar";
-import AddJadwal from "./pengurus/AddJadwal";
+import AddJadwal from "./pengurus/jadwal/AddJadwal";
+import EditJadwal from "./pengurus/jadwal/EditJadwal";
 import toast from "react-hot-toast";
-import EditJadwal from "./pengurus/EditJadwal";
-import PeminjamanPage from "./pengurus/PeminjamanPage";
+import PeminjamanPage from "./pengurus/peminjaman/PeminjamanPage";
+import AddPeminjaman from "./pengurus/peminjaman/AddPeminjaman";
 
 const userData = JSON.parse(sessionStorage.getItem("userData"));
 const id = userData?.userData.id;
@@ -290,6 +291,13 @@ const UkmPages = () => {
               setApiResponse={setApiResponse}
               setActiveButton={setActiveButton}
               jabatan={jabatan}
+            />
+          )}
+          {activeButton === "tambah-peminjaman" && (
+            <AddPeminjaman
+              id_ukmormawa={idUkm}
+              setApiResponse={setApiResponse}
+              setActiveButton={setActiveButton}
             />
           )}
           {activeButton === "peminjaman" && (
