@@ -1,19 +1,24 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import Collapse from "@mui/material/Collapse";
-import IconButton from "@mui/material/IconButton";
-import Divider from "@mui/material/Divider";
-import Stack from "@mui/material/Stack";
-import { MdDelete, MdEdit } from "react-icons/md";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import Box from "@mui/material/Box";
-import TableRow from "@mui/material/TableRow";
+import {
+  Collapse,
+  IconButton,
+  Divider,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  Tooltip,
+  Box,
+  TableRow,
+  Zoom,
+  Typography,
+} from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { MdDelete, MdEdit } from "react-icons/md";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useParams, useNavigate } from "react-router-dom";
@@ -68,7 +73,7 @@ const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
   return (
     <>
       <TableRow>
-        <TableCell sx={{ maxWidth: 20, minWidth: 20 }}>
+        <TableCell sx={{ maxWidth: 50, minWidth: 50 }}>
           <IconButton
             aria-label="expand row"
             size="small"
@@ -81,7 +86,15 @@ const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
         <TableCell align="left">
           {dayjs(row.tanggal).format("d MMMM YYYY")}
         </TableCell>
-        <TableCell align="left">{row.nama_kegiatan}</TableCell>
+        <TableCell align="left" sx={{ maxWidth: 200 }}>
+          {row.nama_kegiatan.length > 15 ? (
+            <Tooltip title={row.nama_kegiatan}>
+              <Typography noWrap>{row.nama_kegiatan}</Typography>
+            </Tooltip>
+          ) : (
+            <Typography noWrap>{row.nama_kegiatan}</Typography>
+          )}
+        </TableCell>
         <TableCell align="left">{row.tempat}</TableCell>
         <TableCell align="left">
           {formatTime(row.start)} - {row.end ? formatTime(row.end) : "Selesai"}
