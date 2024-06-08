@@ -10,6 +10,7 @@ import Navbar from "../components/Navbar";
 import AddJadwal from "./pengurus/AddJadwal";
 import toast from "react-hot-toast";
 import EditJadwal from "./pengurus/EditJadwal";
+import PeminjamanPage from "./pengurus/PeminjamanPage";
 
 const userData = JSON.parse(sessionStorage.getItem("userData"));
 const id = userData?.userData.id;
@@ -44,7 +45,7 @@ const DaftarAnggota = ({ idUkm }) => {
   }, [idUkm]);
 
   return (
-    <div className="grid grid-cols-4 grid-flow-row w-full justify-center mt-5">
+    <div className="grid grid-cols-4 grid-flow-row w-full justify-center">
       {anggota.length > 0 ? (
         anggota.map((anggota) => (
           <div
@@ -165,6 +166,76 @@ const UkmPages = () => {
     };
     fetchUKM_User();
   }, []);
+
+  const buttons =
+    jabatan === "Pengurus" ? (
+      <div className="grid grid-cols-7 text-xl gap-4 font-bold mx-24 mt-8 w-full mb-5">
+        <Button
+          variant={activeButton === "home" ? "contained" : "outlined"}
+          className="col-start-3"
+          onClick={() => handleButtonClick("home")}
+          sx={{
+            borderRadius: 3,
+            padding: "3px 3px",
+            textTransform: "none",
+          }}
+        >
+          Home
+        </Button>
+        <Button
+          variant={activeButton === "anggota" ? "contained" : "outlined"}
+          className="col-start-4"
+          onClick={() => handleButtonClick("anggota")}
+          sx={{
+            borderRadius: 3,
+            padding: "3px 3px",
+            textTransform: "none",
+          }}
+        >
+          Daftar Anggota
+        </Button>
+        <Button
+          variant={activeButton === "peminjaman" ? "contained" : "outlined"}
+          className="col-start-5"
+          onClick={() => handleButtonClick("peminjaman")}
+          sx={{
+            borderRadius: 3,
+            padding: "3px 3px",
+            textTransform: "none",
+          }}
+        >
+          Peminjaman
+        </Button>
+      </div>
+    ) : (
+      <div className="grid grid-cols-6 text-xl gap-4 font-bold mx-24 mt-8 w-full mb-5">
+        <Button
+          variant={activeButton === "home" ? "contained" : "outlined"}
+          className="col-start-3"
+          onClick={() => handleButtonClick("home")}
+          sx={{
+            borderRadius: 3,
+            padding: "3px 3px",
+            textTransform: "none",
+          }}
+        >
+          Home
+        </Button>
+        <Button
+          variant={activeButton === "anggota" ? "contained" : "outlined"}
+          className="col-start-4"
+          onClick={() => handleButtonClick("anggota")}
+          sx={{
+            borderRadius: 3,
+            padding: "3px 3px",
+            textTransform: "none",
+          }}
+        >
+          Daftar Anggota
+        </Button>
+      </div>
+    );
+
   return (
     <>
       <Navbar type="home" name={userData.userData.nama} />
@@ -183,39 +254,14 @@ const UkmPages = () => {
           </div>
 
           <h1 className="text-2xl font-bold text-center">{ukmName}</h1>
-          <div className="grid grid-cols-6 text-xl gap-4 font-bold mx-24 mt-8 w-full mb-5">
-            <Button
-              variant={activeButton === "home" ? "contained" : "outlined"}
-              className="col-start-3"
-              onClick={() => handleButtonClick("home")}
-              sx={{
-                borderRadius: 3,
-                padding: "3px 3px",
-                textTransform: "none",
-              }}
-            >
-              Home
-            </Button>
-            <Button
-              variant={activeButton === "anggota" ? "contained" : "outlined"}
-              className="col-start-4"
-              onClick={() => handleButtonClick("anggota")}
-              sx={{
-                borderRadius: 3,
-                padding: "3px 3px",
-                textTransform: "none",
-              }}
-            >
-              Daftar Anggota
-            </Button>
-          </div>
+          {buttons}
           {activeButton === "home" && (
             <div>
               {jabatan != null && jabatan.toLowerCase() === "pengurus" && (
                 <div className="flex flex-row justify-end">
                   <Button
                     variant="contained"
-                    onClick={() => handleButtonClick("tambah")}
+                    onClick={() => handleButtonClick("tambah-kegiatan")}
                   >
                     Tambah
                   </Button>
@@ -227,8 +273,12 @@ const UkmPages = () => {
               </div>
             </div>
           )}
-          {activeButton === "anggota" && <DaftarAnggota idUkm={idUkm} />}
-          {activeButton === "tambah" && (
+          {activeButton === "anggota" && (
+            <div className="flex flex-col w-full rounded-xl mt-3">
+              <DaftarAnggota idUkm={idUkm} />
+            </div>
+          )}
+          {activeButton === "tambah-kegiatan" && (
             <AddJadwal
               id_ukmormawa={idUkm}
               setApiResponse={setApiResponse}
@@ -241,6 +291,27 @@ const UkmPages = () => {
               setActiveButton={setActiveButton}
               jabatan={jabatan}
             />
+          )}
+          {activeButton === "peminjaman" && (
+            <div>
+              {jabatan != null && jabatan.toLowerCase() === "pengurus" && (
+                <div className="flex flex-row justify-end">
+                  <Button
+                    variant="contained"
+                    onClick={() => handleButtonClick("tambah-peminjaman")}
+                  >
+                    Tambah
+                  </Button>
+                </div>
+              )}
+
+              <div className="flex flex-col shadow-lg border border-black/10 rounded-xl mt-3">
+                <PeminjamanPage
+                  jabatan={jabatan}
+                  setApiResponse={setApiResponse}
+                />
+              </div>
+            </div>
           )}
           {/* <AddJadwal id_ukmormawa={idUkm} /> */}
         </div>

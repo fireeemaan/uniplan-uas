@@ -108,6 +108,7 @@ const AddJadwal = ({ id_ukmormawa, setApiResponse, setActiveButton }) => {
               size="small"
               id="time_end"
               label={noTimeEnd ? "Selesai" : "Waktu Selesai"}
+              value={noTimeEnd ? null : inputs.time_end}
               ampm={false}
               minTime={inputs.time_start ? inputs.time_start : null}
               onChange={(value) => handleInputChange(value, "time_end")}

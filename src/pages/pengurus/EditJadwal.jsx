@@ -17,6 +17,7 @@ const id_user = userData?.userData.id;
 const EditJadwal = ({ setApiResponse, setActiveButton, jabatan }) => {
   const [inputs, setInputs] = useState({});
   const [kegiatan, setKegiatan] = useState({});
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const navigate = useNavigate();
 
@@ -61,6 +62,7 @@ const EditJadwal = ({ setApiResponse, setActiveButton, jabatan }) => {
           setActiveButton("home");
           navigate(`/ukm-ormawa/${name}`);
         } else {
+          setIsLoaded(true);
           setKegiatan(response.data.data.kegiatan);
         }
       })
@@ -105,67 +107,71 @@ const EditJadwal = ({ setApiResponse, setActiveButton, jabatan }) => {
   };
 
   return (
-    <Box className="flex flex-col gap-2 bg-white p-5 rounded-lg shadow-lg border border-black/10">
-      <h1 className="font-bold">Edit Jadwal</h1>
-      <form className="flex flex-col gap-5">
-        <TextField
-          size="small"
-          id="nama_kegiatan"
-          label="Nama Kegiatan"
-          InputLabelProps={{ shrink: true }}
-          value={kegiatan && kegiatan.nama_kegiatan}
-          onChange={handleInputChange}
-        />
-        <TextField
-          size="small"
-          id="tempat"
-          label="Tempat"
-          value={kegiatan.tempat}
-          InputLabelProps={{ shrink: true }}
-          onChange={handleInputChange}
-        />
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            size="small"
-            id="date"
-            label="Tanggal"
-            value={dayjs(kegiatan.tanggal)}
-            onChange={(value) => handleInputChange(value, "date")}
-          />
-          <div className="flex flex-row items-center gap-5">
-            <TimePicker
+    <>
+      {isLoaded ? (
+        <Box className="flex flex-col gap-2 bg-white p-5 rounded-lg shadow-lg border border-black/10">
+          <h1 className="font-bold">Edit Jadwal</h1>
+          <form className="flex flex-col gap-5">
+            <TextField
               size="small"
-              id="time_start"
-              label="Waktu Mulai"
-              ampm={false}
-              value={parseTimeString(kegiatan.start)}
-              onChange={(value) => handleInputChange(value, "time_start")}
+              id="nama_kegiatan"
+              label="Nama Kegiatan"
+              InputLabelProps={{ shrink: true }}
+              value={kegiatan && kegiatan.nama_kegiatan}
+              onChange={handleInputChange}
             />
-            -
-            <TimePicker
+            <TextField
               size="small"
-              id="time_end"
-              label="Waktu Selesai"
-              ampm={false}
-              value={parseTimeString(kegiatan.end)}
-              onChange={(value) => handleInputChange(value, "time_end")}
+              id="tempat"
+              label="Tempat"
+              value={kegiatan.tempat}
+              InputLabelProps={{ shrink: true }}
+              onChange={handleInputChange}
             />
-          </div>
-        </LocalizationProvider>
-        <TextField
-          size="small"
-          id="deskripsi"
-          label="Keterangan"
-          value={kegiatan.deskripsi}
-          InputLabelProps={{ shrink: true }}
-          multiline={true}
-          onChange={handleInputChange}
-        />
-        <Button variant="contained" onClick={handleSubmit}>
-          Submit
-        </Button>
-      </form>
-    </Box>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                size="small"
+                id="date"
+                label="Tanggal"
+                value={dayjs(kegiatan.tanggal)}
+                onChange={(value) => handleInputChange(value, "date")}
+              />
+              <div className="flex flex-row items-center gap-5">
+                <TimePicker
+                  size="small"
+                  id="time_start"
+                  label="Waktu Mulai"
+                  ampm={false}
+                  value={parseTimeString(kegiatan.start)}
+                  onChange={(value) => handleInputChange(value, "time_start")}
+                />
+                -
+                <TimePicker
+                  size="small"
+                  id="time_end"
+                  label="Waktu Selesai"
+                  ampm={false}
+                  value={parseTimeString(kegiatan.end)}
+                  onChange={(value) => handleInputChange(value, "time_end")}
+                />
+              </div>
+            </LocalizationProvider>
+            <TextField
+              size="small"
+              id="deskripsi"
+              label="Keterangan"
+              value={kegiatan.deskripsi}
+              InputLabelProps={{ shrink: true }}
+              multiline={true}
+              onChange={handleInputChange}
+            />
+            <Button variant="contained" onClick={handleSubmit}>
+              Submit
+            </Button>
+          </form>
+        </Box>
+      ) : null}
+    </>
   );
 };
 
