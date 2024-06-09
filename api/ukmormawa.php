@@ -16,6 +16,16 @@ function createResponse($status, $message, $data = [])
     return json_encode($response);
 }
 
+function getAllUKM()
+{
+    global $conn;
+    $sql = "SELECT * FROM ukmormawa";
+    $result = $conn->query($sql);
+    $result = $result->fetch_all(MYSQLI_ASSOC);
+
+    echo createResponse('success', 'Data retrieved successfully', ['ukmormawa' => $result]);
+}
+
 
 function getAll($id_user)
 {
@@ -47,12 +57,12 @@ function getByUser($id_user)
     echo createResponse('success', 'Data retrieved successfully', ['ukmormawa' => $result]);
 }
 
-function getAnggota($id_ukm)
+function getAnggotaByUKMName($ukm_name)
 {
     global $conn;
-    $sql = "SELECT us.id, us.nama, us.nim, us.no_hp, us.email, j.jabatan, p.prodi FROM users us JOIN ukmormawa_user uu ON uu.id_user = us.id JOIN jabatan j ON uu.id_jabatan = j.id JOIN ukmormawa u ON uu.id_ukmormawa = u.id JOIN prodi p ON us.id_prodi = p.id WHERE u.id = ?";
+    $sql = "SELECT us.id, us.nama, us.nim, us.no_hp, us.email, j.jabatan, p.prodi FROM users us JOIN ukmormawa_user uu ON uu.id_user = us.id JOIN jabatan j ON uu.id_jabatan = j.id JOIN ukmormawa u ON uu.id_ukmormawa = u.id JOIN prodi p ON us.id_prodi = p.id WHERE u.singkatan = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('i', $id_ukm);
+    $stmt->bind_param('s', $ukm_name);
     $stmt->execute();
     $result = $stmt->get_result();
     $result = $result->fetch_all(MYSQLI_ASSOC);
@@ -63,22 +73,19 @@ function getAnggota($id_ukm)
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    $id_user = "";
-    $id_ukm = "";
     if (isset($_GET['action'])) {
         $action = $_GET['action'];
-        if (isset($_GET['id_user'])) {
-            $id_user = $_GET['id_user'];
-        }
-        if (isset($_GET['id_ukm'])) {
-            $id_ukm = $_GET['id_ukm'];
-        }
         switch ($action) {
             case 'getAll':
+                $id_user = $_GET['id_user'];
                 getAll($id_user);
                 break;
             case 'getAnggota':
-                getAnggota($id_ukm);
+                $ukm_name = $_GET['ukm_name'];
+                getAnggotaByUKMName($ukm_name);
+                break;
+            case 'getAllUKM':
+                getAllUKM();
                 break;
             default:
                 echo createResponse('error', 'Invalid action');

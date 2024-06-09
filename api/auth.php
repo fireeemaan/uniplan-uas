@@ -51,7 +51,7 @@ function validateNIM($nim)
 
 }
 
-function saveRegister($nama, $nim, $no_hp, $username, $password, $email)
+function saveRegister($nama, $nim, $no_hp, $username, $password, $email, $ukmormawa)
 {
     global $conn;
 
@@ -68,6 +68,14 @@ function saveRegister($nama, $nim, $no_hp, $username, $password, $email)
     $stmt_cred = $conn->prepare($sql_cred);
     $stmt_cred->bind_param('ssi', $username, $password, $id_user);
     $stmt_cred->execute();
+
+    foreach ($ukmormawa as $ukm) {
+        $sql_ukm = "INSERT INTO ukmormawa_user SET id_ukmormawa = ?, id_user = ?, id_jabatan = 1;";
+        $stmt_ukm = $conn->prepare($sql_ukm);
+        $stmt_ukm->bind_param('ii', $ukm, $id_user);
+        $stmt_ukm->execute();
+    }
+    echo createResponse('success', 'Register success, Please Login.');
 
 }
 
@@ -138,6 +146,7 @@ function register()
             $username = isset($data['username']) ? $data['username'] : '';
             $password = isset($data['password']) ? $data['password'] : '';
             $email = isset($data['email']) ? $data['email'] : '';
+            $ukmormawa = isset($data['ukmormawa']) ? $data['ukmormawa'] : '';
 
             if (!validateInput($username) || !validateInput($password) || !validateInput($email) || !validateInput($name) || !validateInput($nim) || !validateInput($no_hp)) {
                 echo createResponse('error', 'Invalid input');
@@ -160,11 +169,16 @@ function register()
                 exit;
             }
 
+            if (!validateNIM($nim)) {
+                echo createResponse('error', 'NIM already exists');
+                exit;
+            }
+
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
 
-            echo createResponse('success', 'Register success');
-            saveRegister($name, $nim, $no_hp, $username, $hashedPassword, $email);
+
+            saveRegister($name, $nim, $no_hp, $username, $hashedPassword, $email, $ukmormawa);
 
         } else {
             echo createResponse('error', 'Register failed');

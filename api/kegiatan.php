@@ -70,7 +70,7 @@ function getById($id)
 function getByName($ukmName)
 {
     global $conn;
-    $sql = "SELECT k.* FROM kegiatan k JOIN ukmormawa u ON k.id_ukmormawa = u.id WHERE u.singkatan = ? AND deleted_at IS NULL";
+    $sql = "SELECT k.* FROM kegiatan k JOIN ukmormawa u ON k.id_ukmormawa = u.id WHERE u.singkatan = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('s', $ukmName);
     $stmt->execute();
