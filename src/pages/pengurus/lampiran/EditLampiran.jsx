@@ -9,7 +9,7 @@ import { Icon, IconButton } from "@mui/material";
 const EditLampiran = ({ setApiResponse, setActiveButton }) => {
   const [inputs, setInputs] = useState({});
 
-  const { name, idPeminjaman } = useParams();
+  const { name, idPeminjaman, idLampiran } = useParams();
   const navigate = useNavigate();
 
   const handleInputChange = (event) => {
@@ -17,29 +17,53 @@ const EditLampiran = ({ setApiResponse, setActiveButton }) => {
     setInputs((values) => ({ ...values, [id]: value }));
   };
 
+  useEffect(() => {
+    axios
+      .get("http://localhost/pweb-uas/api/lampiran.php", {
+        params: {
+          action: "getById",
+          id_lampiran: idLampiran,
+        },
+      })
+      .then((response) => {
+        console.log(idLampiran);
+        console.log(response.data);
+        const data = response.data.data.lampiran;
+        console.log(data);
+        setInputs(data);
+      });
+  }, []);
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    console.log(inputs);
-    axios
-      .post("http://localhost/pweb-uas/api/lampiran.php", {
-        action: "addLampiran",
-        id_peminjaman: idPeminjaman,
-        nama_barang: inputs.nama,
-        jumlah: inputs.jumlah,
-        keterangan: inputs.keterangan,
-      })
-      .then((response) => {
-        console.log(response.data);
-        setApiResponse(response.data);
-        if (response.data.status === "success") {
-          setActiveButton("peminjaman");
-          navigate(`/ukm-ormawa/${name}`);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
+    if (!inputs.nama || !inputs.jumlah) {
+      setApiResponse({
+        status: "error",
+        message: "Nama dan Jumlah Wajib Diisi!",
       });
+    } else {
+      console.log(inputs);
+      axios
+        .post("http://localhost/pweb-uas/api/lampiran.php", {
+          action: "updateLampiran",
+          id_lampiran: idLampiran,
+          nama_barang: inputs.nama,
+          jumlah: inputs.jumlah,
+          keterangan: inputs.keterangan,
+        })
+        .then((response) => {
+          console.log(response.data);
+          setApiResponse(response.data);
+          if (response.data.status === "success") {
+            setActiveButton("peminjaman");
+            navigate(`/ukm-ormawa/${name}`);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
   return (
     <Box className="flex flex-col gap-2 bg-white p-5 rounded-lg shadow-lg border border-black/10">
@@ -49,12 +73,16 @@ const EditLampiran = ({ setApiResponse, setActiveButton }) => {
           size="small"
           id="nama"
           label="Nama Barang"
+          InputLabelProps={{ shrink: true }}
+          value={inputs.nama}
           onChange={handleInputChange}
         />
         <TextField
           size="small"
           id="jumlah"
           label="Jumlah Barang"
+          InputLabelProps={{ shrink: true }}
+          value={inputs.jumlah}
           onChange={handleInputChange}
         />
         <TextField
@@ -62,6 +90,8 @@ const EditLampiran = ({ setApiResponse, setActiveButton }) => {
           id="keterangan"
           label="Keterangan"
           multiline={true}
+          InputLabelProps={{ shrink: true }}
+          value={inputs.keterangan}
           onChange={handleInputChange}
         />
         <Button variant="contained" onClick={handleSubmit}>

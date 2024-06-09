@@ -48,6 +48,31 @@ const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
     );
   };
 
+  const handleDeleteLampiran = (id_lampiran) => {
+    confirm({
+      title: "Hapus Lampiran",
+      description: "Apakah Anda yakin ingin menghapus lampiran ini?",
+    })
+      .then(() => {
+        axios
+          .post("http://localhost/pweb-uas/api/lampiran.php", {
+            action: "deleteLampiran",
+            id_lampiran: id_lampiran,
+          })
+          .then((response) => {
+            console.log(response);
+            setApiResponse(response.data);
+            if (response.data.status === "success") {
+              fetchData();
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      })
+      .catch(() => {});
+  };
+
   const handleDelete = (id) => {
     confirm({
       title: "Hapus Peminjaman",
@@ -161,34 +186,44 @@ const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.lampiran.map((item) => (
-                    <TableRow key={item.id}>
-                      <TableCell align="left">{item.nama}</TableCell>
-                      <TableCell align="left">{item.jumlah}</TableCell>
-                      <TableCell align="left">
-                        {item.keterangan ? item.keterangan : "-"}
-                      </TableCell>
-                      <TableCell align="right">
-                        {" "}
-                        <Stack
-                          direction="row"
-                          spacing={1}
-                          divider={<Divider orientation="vertical" flexItem />}
-                        >
-                          <IconButton color="error" size="small">
-                            <MdDelete fontSize="large " />
-                          </IconButton>
-                          <IconButton
-                            color="info"
-                            size="small"
-                            onClick={() => handleEditLampiran(row.id, item.id)}
+                  {row.lampiran
+                    .filter((row) => row.deleted_at === null)
+                    .map((item) => (
+                      <TableRow key={item.id}>
+                        <TableCell align="left">{item.nama}</TableCell>
+                        <TableCell align="left">{item.jumlah}</TableCell>
+                        <TableCell align="left">
+                          {item.keterangan ? item.keterangan : "-"}
+                        </TableCell>
+                        <TableCell align="right">
+                          {" "}
+                          <Stack
+                            direction="row"
+                            spacing={1}
+                            divider={
+                              <Divider orientation="vertical" flexItem />
+                            }
                           >
-                            <MdEdit fontSize="large" />
-                          </IconButton>
-                        </Stack>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                            <IconButton
+                              color="error"
+                              size="small"
+                              onClick={() => handleDeleteLampiran(item.id)}
+                            >
+                              <MdDelete fontSize="large " />
+                            </IconButton>
+                            <IconButton
+                              color="info"
+                              size="small"
+                              onClick={() =>
+                                handleEditLampiran(row.id, item.id)
+                              }
+                            >
+                              <MdEdit fontSize="large" />
+                            </IconButton>
+                          </Stack>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </Box>

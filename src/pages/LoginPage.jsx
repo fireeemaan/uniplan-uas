@@ -18,6 +18,7 @@ function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [apiResponse, setApiResponse] = useState({});
   const [error, setError] = useState("");
 
   const handleBack = () => {
@@ -25,12 +26,14 @@ function LoginPage() {
   };
 
   useEffect(() => {
-    if (error) {
-      toast.error(error);
-      setError("");
+    if (apiResponse.status) {
+      if (apiResponse.status === "success") {
+        toast.success(apiResponse.message);
+      } else {
+        toast.error(apiResponse.message);
+      }
     }
-    console.log(error);
-  }, [error]);
+  }, [apiResponse]);
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -63,7 +66,7 @@ function LoginPage() {
           );
           window.location.href = "/homepage";
         } else {
-          setError(response.data.message);
+          setApiResponse(response.data);
         }
       })
       .catch((error) => {

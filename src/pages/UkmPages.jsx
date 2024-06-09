@@ -27,6 +27,8 @@ let idUkm = "";
 const DaftarAnggota = ({ idUkm }) => {
   const [anggota, setAnggota] = useState([]);
 
+  const { name } = useParams();
+
   useEffect(() => {
     const fetchAnggota = async () => {
       try {
@@ -35,7 +37,7 @@ const DaftarAnggota = ({ idUkm }) => {
           {
             params: {
               action: "getAnggota",
-              id_ukm: idUkm,
+              ukm_name: name.toUpperCase(),
             },
           }
         );
