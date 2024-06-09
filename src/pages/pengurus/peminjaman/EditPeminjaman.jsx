@@ -54,10 +54,10 @@ const EditPeminjaman = ({ setApiResponse, setActiveButton, jabatan }) => {
       })
       .then((response) => {
         const data = response.data.data.peminjaman;
-        console.log(data);
+        // console.log(data);
         setPeminjaman(data);
 
-        console.log(optionsValue);
+        // console.log(optionsValue);
 
         const initialDosen = optionsValue.dosen.find(
           (option) => option.id == data.id_dosen
@@ -71,8 +71,8 @@ const EditPeminjaman = ({ setApiResponse, setActiveButton, jabatan }) => {
           kegiatan: initialKegiatan || null,
         });
 
-        console.log(initialOptionValue);
-        console.log(initialDosen);
+        // console.log(initialOptionValue);
+        // console.log(initialDosen);
         // console.log(data.id_kegiatan);
       });
   }, [dosen, kegiatan]);
@@ -93,13 +93,15 @@ const EditPeminjaman = ({ setApiResponse, setActiveButton, jabatan }) => {
         setKegiatan(dataKegiatan);
         setDosen(dataDosen);
 
-        const optionsKegiatan = dataKegiatan.map((option) => {
-          const firstLetter = option.nama_kegiatan[0].toUpperCase();
-          return {
-            firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
-            ...option,
-          };
-        });
+        const optionsKegiatan = dataKegiatan
+          .filter((option) => option.deleted_at === null)
+          .map((option) => {
+            const firstLetter = option.nama_kegiatan[0].toUpperCase();
+            return {
+              firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
+              ...option,
+            };
+          });
 
         const optionsDosen = dataDosen.map((option) => {
           const firstLetter = option.nama[0].toUpperCase();
@@ -121,21 +123,66 @@ const EditPeminjaman = ({ setApiResponse, setActiveButton, jabatan }) => {
 
   const handleInputChange = (event, field) => {
     if (field) {
-      setInputs((values) => ({ ...values, [field]: event }));
+      setPeminjaman((values) => ({ ...values, [field]: event }));
       // console.log(inputs);
     } else {
       const { id, value } = event.target;
-      setInputs((values) => ({ ...values, [id]: value }));
+      setPeminjaman((values) => ({ ...values, [id]: value }));
     }
   };
-  const handleAutoCompleteChange = (event, value, field) => {
-    setInputs((values) => ({ ...values, [field]: value ? value.id : null }));
+  const handleAutoCompleteChange = (event, value, field, id_field = null) => {
+    // console.log("Event", event);
+    // console.log("Value", value);
+    // console.log("Field", field);
+
+    // if (id_field) {
+    //   setPeminjaman((values) => ({
+    //     ...values,
+    //     [id_field]: value.id ? value.id : null,
+    //   }));
+    // }
+
+    setPeminjaman((values) => ({
+      ...values,
+      [field]: value ? value.id : null,
+    }));
+
+    setInitialOptionValue((values) => ({ ...values, [field]: value }));
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    console.log(inputs);
+    console.log(peminjaman);
+    const a = peminjaman.date
+      ? dayjs(peminjaman.date).format("YYYY-MM-DD")
+      : peminjaman.tanggal;
+    console.log(a);
+
+    axios
+      .post("http://localhost/pweb-uas/api/peminjaman.php", {
+        action: "updatePeminjaman",
+        id_peminjaman: idPeminjaman,
+        hal: peminjaman.hal,
+        tanggal: peminjaman.date
+          ? dayjs(peminjaman.date).format("YYYY-MM-DD")
+          : peminjaman.tanggal,
+        id_kegiatan: peminjaman.kegiatan
+          ? peminjaman.kegiatan
+          : peminjaman.id_kegiatan,
+        id_dosen: peminjaman.dosen ? peminjaman.dosen : peminjaman.id_dosen,
+      })
+      .then((response) => {
+        console.log(response.data);
+        setApiResponse(response.data);
+        if (response.data.status === "success") {
+          setActiveButton("peminjaman");
+          navigate(`/ukm-ormawa/${name}`);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const truncateText = (text, length = 80) => {
@@ -155,6 +202,7 @@ const EditPeminjaman = ({ setApiResponse, setActiveButton, jabatan }) => {
             size="small"
             id="hal"
             label="Hal"
+            value={peminjaman.hal}
             onChange={handleInputChange}
             sx={{ width: 500 }}
           />
@@ -163,6 +211,7 @@ const EditPeminjaman = ({ setApiResponse, setActiveButton, jabatan }) => {
               size="small"
               id="date"
               label="Tanggal"
+              value={dayjs(peminjaman.tanggal)}
               onChange={(value) => handleInputChange(value, "date")}
             />
           </LocalizationProvider>

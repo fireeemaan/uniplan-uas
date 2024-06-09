@@ -13,6 +13,8 @@ import toast from "react-hot-toast";
 import PeminjamanPage from "./pengurus/peminjaman/PeminjamanPage";
 import AddPeminjaman from "./pengurus/peminjaman/AddPeminjaman";
 import EditPeminjaman from "./pengurus/peminjaman/EditPeminjaman";
+import AddLampiran from "./pengurus/lampiran/AddLampiran";
+import EditLampiran from "./pengurus/lampiran/EditLampiran";
 
 const userData = JSON.parse(sessionStorage.getItem("userData"));
 const id = userData?.userData.id;
@@ -82,7 +84,8 @@ const UkmPages = () => {
   const [isEdited, setIsEdited] = useState(false);
   const [ukmUser, setUkmUser] = useState([]);
   const [ukm, setUkm] = useState([]);
-  const { name, idKegiatan, idPeminjaman } = useParams();
+  const { name, idKegiatan, idPeminjaman, action, actionLampiran } =
+    useParams();
 
   const [apiResponse, setApiResponse] = useState({});
 
@@ -100,7 +103,6 @@ const UkmPages = () => {
     findUkm = ukmUser.find((ukm) => ukm.singkatan.toLowerCase() === name);
   }
   if (id_role === "2") {
-    console.log("Hello");
     findUkm = ukm.find((ukm) => ukm.singkatan.toLowerCase() === name);
   }
 
@@ -135,7 +137,15 @@ const UkmPages = () => {
   }, [idKegiatan]);
   useEffect(() => {
     if (idPeminjaman) {
-      setActiveButton("edit-peminjaman");
+      if (action === "edit") {
+        setActiveButton("edit-peminjaman");
+      } else if (action === "lampiran") {
+        if (actionLampiran === "edit") {
+          setActiveButton("edit-lampiran");
+        } else {
+          setActiveButton("lampiran");
+        }
+      }
     }
   }, [idPeminjaman]);
 
@@ -334,7 +344,18 @@ const UkmPages = () => {
               jabatan={jabatan}
             />
           )}
-          {/* <AddJadwal id_ukmormawa={idUkm} /> */}
+          {activeButton === "lampiran" && (
+            <AddLampiran
+              setApiResponse={setApiResponse}
+              setActiveButton={setActiveButton}
+            />
+          )}
+          {activeButton === "edit-lampiran" && (
+            <EditLampiran
+              setApiResponse={setApiResponse}
+              setActiveButton={setActiveButton}
+            />
+          )}
         </div>
       </div>
     </>

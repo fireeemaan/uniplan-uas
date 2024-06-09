@@ -13,12 +13,12 @@ import {
   Tooltip,
   Box,
   TableRow,
-  Zoom,
   Typography,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { MdDelete, MdEdit } from "react-icons/md";
+import { IoIosAdd } from "react-icons/io";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useParams, useNavigate } from "react-router-dom";
@@ -38,24 +38,31 @@ const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
     navigate(`/ukm-ormawa/${name}/peminjaman/${id}/edit`);
   };
 
+  const handleAddLampiran = (id) => {
+    navigate(`/ukm-ormawa/${name}/peminjaman/${id}/lampiran`);
+  };
+
+  const handleEditLampiran = (id, id_lampiran) => {
+    navigate(
+      `/ukm-ormawa/${name}/peminjaman/${id}/lampiran/${id_lampiran}/edit`
+    );
+  };
+
   const handleDelete = (id) => {
     confirm({
-      title: "Hapus Kegiatan",
-      description: "Apakah Anda yakin ingin menghapus kegiatan ini?",
+      title: "Hapus Peminjaman",
+      description: "Apakah Anda yakin ingin menghapus peminjaman ini?",
     })
       .then(() => {
         axios
-          .get("http://localhost/pweb-uas/api/kegiatan.php", {
-            params: {
-              action: "deleteJadwal",
-              id_kegiatan: id,
-            },
+          .post("http://localhost/pweb-uas/api/peminjaman.php", {
+            action: "deletePeminjaman",
+            id_peminjaman: id,
           })
           .then((response) => {
-            console.log(response.data.status);
+            console.log(response);
             setApiResponse(response.data);
             if (response.data.status === "success") {
-              // console.log("HELLO!");
               fetchData();
             }
           })
@@ -85,7 +92,7 @@ const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
         </TableCell>
         <TableCell align="left">{row.hal}</TableCell>
         <TableCell align="left">
-          {dayjs(row.tanggal).format("d MMMM YYYY")}
+          {dayjs(row.tanggal).format("D MMMM YYYY")}
         </TableCell>
         <TableCell align="left" sx={{ maxWidth: 200 }}>
           {row.nama_kegiatan.length > 15 ? (
@@ -121,7 +128,19 @@ const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 2, gap: "10px" }}>
-              <h1 className="text-lg font-bold mb-5">Lampiran</h1>
+              <div className="flex flex-row items-center mb-5 gap-2">
+                <h1 className="text-lg font-bold">Lampiran</h1>
+                <Tooltip title="Tambah Lampiran">
+                  <IconButton
+                    aria-label="Tambah Lampiran"
+                    size="medium"
+                    onClick={() => handleAddLampiran(row.id)}
+                  >
+                    <IoIosAdd fontSize="inherit" />
+                  </IconButton>
+                </Tooltip>
+              </div>
+
               <Table
                 size="small"
                 aria-label="purchases"
@@ -138,6 +157,7 @@ const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
                     <TableCell align="left" sx={{ fontWeight: "bold" }}>
                       Keterangan
                     </TableCell>
+                    <TableCell />
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -147,6 +167,25 @@ const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
                       <TableCell align="left">{item.jumlah}</TableCell>
                       <TableCell align="left">
                         {item.keterangan ? item.keterangan : "-"}
+                      </TableCell>
+                      <TableCell align="right">
+                        {" "}
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          divider={<Divider orientation="vertical" flexItem />}
+                        >
+                          <IconButton color="error" size="small">
+                            <MdDelete fontSize="large " />
+                          </IconButton>
+                          <IconButton
+                            color="info"
+                            size="small"
+                            onClick={() => handleEditLampiran(row.id, item.id)}
+                          >
+                            <MdEdit fontSize="large" />
+                          </IconButton>
+                        </Stack>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -175,7 +214,7 @@ const PeminjamanPage = ({ setApiResponse, jabatan }) => {
         {
           params: {
             action: "getAllByUKM",
-            id_ukmormawa: 1,
+            abbrevation: name.toUpperCase(),
           },
         }
       );

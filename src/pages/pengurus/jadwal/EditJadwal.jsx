@@ -50,10 +50,10 @@ const EditJadwal = ({ setApiResponse, setActiveButton, jabatan }) => {
     console.log(idKegiatan);
 
     axios
-      .get("http://localhost/pweb-uas/api/kegiatan.php", {
+      .get("http://localhost/pweb-uas/api/lampiran.php", {
         params: {
           action: "getById",
-          id_kegiatan: idKegiatan,
+          id_lampiran: idKegiatan,
         },
       })
       .then((response) => {

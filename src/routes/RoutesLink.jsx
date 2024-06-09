@@ -23,11 +23,15 @@ const RoutesLink = () => {
         <Route path="/ukm-ormawa/:name" element={<UkmPages />} />
         {/* <Route path="/ukm-ormawa/:name/:id" element={<UkmPages />} /> */}
         <Route
-          path="/ukm-ormawa/:name/jadwal/:idKegiatan/edit"
+          path="/ukm-ormawa/:name/jadwal/:idKegiatan/:action"
           element={<UkmPages />}
         />
         <Route
-          path="/ukm-ormawa/:name/peminjaman/:idPeminjaman/edit"
+          path="/ukm-ormawa/:name/peminjaman/:idPeminjaman/:action"
+          element={<UkmPages />}
+        />
+        <Route
+          path="/ukm-ormawa/:name/peminjaman/:idPeminjaman/:action/:idLampiran/:actionLampiran"
           element={<UkmPages />}
         />
       </Routes>

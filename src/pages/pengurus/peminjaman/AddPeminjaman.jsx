@@ -57,13 +57,15 @@ const AddPeminjaman = ({ id_ukmormawa, setApiResponse, setActiveButton }) => {
       });
   }, [name]);
 
-  const optionsKegiatan = kegiatan.map((option) => {
-    const firstLetter = option.nama_kegiatan[0].toUpperCase();
-    return {
-      firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
-      ...option,
-    };
-  });
+  const optionsKegiatan = kegiatan
+    .filter((option) => option.deleted_at === null)
+    .map((option) => {
+      const firstLetter = option.nama_kegiatan[0].toUpperCase();
+      return {
+        firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
+        ...option,
+      };
+    });
 
   const optionsDosen = dosen.map((option) => {
     const firstLetter = option.nama[0].toUpperCase();

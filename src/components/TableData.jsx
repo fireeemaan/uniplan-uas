@@ -1,24 +1,26 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import Collapse from "@mui/material/Collapse";
-import IconButton from "@mui/material/IconButton";
-import Divider from "@mui/material/Divider";
-import Stack from "@mui/material/Stack";
-import { MdDelete, MdEdit } from "react-icons/md";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import TableRow from "@mui/material/TableRow";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import React from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useParams, useNavigate } from "react-router-dom";
 import { useConfirm } from "material-ui-confirm";
+import { MdDelete, MdEdit } from "react-icons/md";
+import {
+  Collapse,
+  Divider,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
 
 const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
   const { row } = props;
@@ -89,7 +91,7 @@ const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
         </TableCell>
 
         <TableCell align="left">
-          {dayjs(row.tanggal).format("d MMMM YYYY")}
+          {dayjs(row.tanggal).format("D MMMM YYYY")}
         </TableCell>
         <TableCell align="left">{row.tempat}</TableCell>
         <TableCell align="left">
