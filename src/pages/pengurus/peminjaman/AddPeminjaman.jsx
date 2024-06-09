@@ -55,7 +55,7 @@ const AddPeminjaman = ({ id_ukmormawa, setApiResponse, setActiveButton }) => {
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [name]);
 
   const optionsKegiatan = kegiatan.map((option) => {
     const firstLetter = option.nama_kegiatan[0].toUpperCase();
@@ -106,36 +106,6 @@ const AddPeminjaman = ({ id_ukmormawa, setApiResponse, setActiveButton }) => {
       .catch((error) => {
         console.error(error);
       });
-
-    // TODO : Add API to save data
-
-    // axios
-    //   .post("http://localhost/pweb-uas/api/kegiatan.php", {
-    //     action: "addJadwal",
-    //     namaKegiatan: inputs.kegiatan_name,
-    //     tempat: inputs.tempat,
-    //     tanggal: inputs.date ? dayjs(inputs.date).format("YYYY-MM-DD") : null,
-    //     waktuMulai: inputs.time_start
-    //       ? dayjs(inputs.time_start).format("HH:mm")
-    //       : null,
-    //     waktuSelesai: inputs.time_end
-    //       ? dayjs(inputs.time_end).format("HH:mm")
-    //       : null,
-    //     deskripsi: inputs.deskripsi,
-    //     id_ukmormawa: id_ukmormawa,
-    //     id_user: id_user,
-    //   })
-    //   .then((response) => {
-    //     console.log(response.data);
-    //     setApiResponse(response.data);
-    //     if (response.data.status === "success") {
-    //       setActiveButton("home");
-    //       navigate(`/ukm-ormawa/${name}`);
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
   };
 
   return (
@@ -197,7 +167,7 @@ const AddPeminjaman = ({ id_ukmormawa, setApiResponse, setActiveButton }) => {
             handleAutoCompleteChange(event, value, "dosen")
           }
           renderInput={(params) => (
-            <TextField {...params} label="Dosen" size="small" />
+            <TextField {...params} label="Dosen Tertuju" size="small" />
           )}
         />
         <Button variant="contained" onClick={handleSubmit}>

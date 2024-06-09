@@ -12,6 +12,7 @@ import EditJadwal from "./pengurus/jadwal/EditJadwal";
 import toast from "react-hot-toast";
 import PeminjamanPage from "./pengurus/peminjaman/PeminjamanPage";
 import AddPeminjaman from "./pengurus/peminjaman/AddPeminjaman";
+import EditPeminjaman from "./pengurus/peminjaman/EditPeminjaman";
 
 const userData = JSON.parse(sessionStorage.getItem("userData"));
 const id = userData?.userData.id;
@@ -81,7 +82,7 @@ const UkmPages = () => {
   const [isEdited, setIsEdited] = useState(false);
   const [ukmUser, setUkmUser] = useState([]);
   const [ukm, setUkm] = useState([]);
-  const { name, idKegiatan } = useParams();
+  const { name, idKegiatan, idPeminjaman } = useParams();
 
   const [apiResponse, setApiResponse] = useState({});
 
@@ -129,9 +130,14 @@ const UkmPages = () => {
 
   useEffect(() => {
     if (idKegiatan) {
-      setActiveButton("edit");
+      setActiveButton("edit-kegiatan");
     }
   }, [idKegiatan]);
+  useEffect(() => {
+    if (idPeminjaman) {
+      setActiveButton("edit-peminjaman");
+    }
+  }, [idPeminjaman]);
 
   useEffect(() => {
     console.log(apiResponse);
@@ -286,18 +292,11 @@ const UkmPages = () => {
               setActiveButton={setActiveButton}
             />
           )}
-          {activeButton === "edit" && (
+          {activeButton === "edit-kegiatan" && (
             <EditJadwal
               setApiResponse={setApiResponse}
               setActiveButton={setActiveButton}
               jabatan={jabatan}
-            />
-          )}
-          {activeButton === "tambah-peminjaman" && (
-            <AddPeminjaman
-              id_ukmormawa={idUkm}
-              setApiResponse={setApiResponse}
-              setActiveButton={setActiveButton}
             />
           )}
           {activeButton === "peminjaman" && (
@@ -320,6 +319,20 @@ const UkmPages = () => {
                 />
               </div>
             </div>
+          )}
+          {activeButton === "tambah-peminjaman" && (
+            <AddPeminjaman
+              id_ukmormawa={idUkm}
+              setApiResponse={setApiResponse}
+              setActiveButton={setActiveButton}
+            />
+          )}
+          {activeButton === "edit-peminjaman" && (
+            <EditPeminjaman
+              setApiResponse={setApiResponse}
+              setActiveButton={setActiveButton}
+              jabatan={jabatan}
+            />
           )}
           {/* <AddJadwal id_ukmormawa={idUkm} /> */}
         </div>

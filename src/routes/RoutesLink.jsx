@@ -26,6 +26,10 @@ const RoutesLink = () => {
           path="/ukm-ormawa/:name/jadwal/:idKegiatan/edit"
           element={<UkmPages />}
         />
+        <Route
+          path="/ukm-ormawa/:name/peminjaman/:idPeminjaman/edit"
+          element={<UkmPages />}
+        />
       </Routes>
     </BrowserRouter>
   );
