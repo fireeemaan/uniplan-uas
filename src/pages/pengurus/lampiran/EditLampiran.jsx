@@ -19,7 +19,7 @@ const EditLampiran = ({ setApiResponse, setActiveButton }) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost/pweb-uas/api/lampiran.php", {
+      .get("https://222410101074.pbw.ilkom.unej.ac.id/api/api/lampiran.php", {
         params: {
           action: "getById",
           id_lampiran: idLampiran,
@@ -45,13 +45,16 @@ const EditLampiran = ({ setApiResponse, setActiveButton }) => {
     } else {
       console.log(inputs);
       axios
-        .post("http://localhost/pweb-uas/api/lampiran.php", {
-          action: "updateLampiran",
-          id_lampiran: idLampiran,
-          nama_barang: inputs.nama,
-          jumlah: inputs.jumlah,
-          keterangan: inputs.keterangan,
-        })
+        .post(
+          "https://222410101074.pbw.ilkom.unej.ac.id/api/api/lampiran.php",
+          {
+            action: "updateLampiran",
+            id_lampiran: idLampiran,
+            nama_barang: inputs.nama,
+            jumlah: inputs.jumlah,
+            keterangan: inputs.keterangan,
+          }
+        )
         .then((response) => {
           console.log(response.data);
           setApiResponse(response.data);

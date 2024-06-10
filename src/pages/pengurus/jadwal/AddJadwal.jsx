@@ -44,7 +44,7 @@ const AddJadwal = ({ id_ukmormawa, setApiResponse, setActiveButton }) => {
     // TODO : Fix Waktu Selesai jika kosong terbaca 00.00
     console.log(inputs);
     axios
-      .post("http://localhost/pweb-uas/api/kegiatan.php", {
+      .post("https://222410101074.pbw.ilkom.unej.ac.id/api/api/kegiatan.php", {
         action: "addJadwal",
         namaKegiatan: inputs.kegiatan_name,
         tempat: inputs.tempat,

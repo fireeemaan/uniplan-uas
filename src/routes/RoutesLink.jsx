@@ -18,7 +18,12 @@ const RoutesLink = () => {
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/homepage" element={<Homepage />} />
-        <Route path="/dashboard/admin" element={<AdminDashboard />} />
+        <Route path="/admin/:name" element={<AdminDashboard />} />
+        <Route path="/admin/:name/:idMahasiswa" element={<AdminDashboard />} />
+        <Route
+          path="/admin/:name/:idMahasiswa/:idUkmMhs/edit"
+          element={<AdminDashboard />}
+        />
         <Route path="/ukm-ormawa" element={<DaftarUkm />} />
         <Route path="/ukm-ormawa/:name" element={<UkmPages />} />
         {/* <Route path="/ukm-ormawa/:name/:id" element={<UkmPages />} /> */}

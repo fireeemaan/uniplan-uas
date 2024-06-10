@@ -30,7 +30,7 @@ function RegisterPage() {
 
   useEffect(() => {
     axios
-      .get("http://localhost/pweb-uas/api/ukmormawa.php", {
+      .get("https://222410101074.pbw.ilkom.unej.ac.id/api/api/ukmormawa.php", {
         params: {
           action: "getAllUKM",
         },
@@ -76,19 +76,13 @@ function RegisterPage() {
     console.log(inputs);
   };
 
-  const handleSucessResponse = () => {
-    setTimeout(() => {
-      window.location.href = "/login";
-    }, 4000);
-  };
-
   const handleSubmit = (event) => {
     event.preventDefault();
 
     console.log(inputs.name);
 
     axios
-      .post("http://localhost/pweb-uas/api/auth.php", {
+      .post("https://222410101074.pbw.ilkom.unej.ac.id/api/api/auth.php", {
         action: "register",
         name: inputs.name,
         nim: inputs.nim,

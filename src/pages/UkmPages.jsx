@@ -33,7 +33,7 @@ const DaftarAnggota = ({ idUkm }) => {
     const fetchAnggota = async () => {
       try {
         const response = await axios.get(
-          "http://localhost/pweb-uas/api/ukmormawa.php",
+          "https://222410101074.pbw.ilkom.unej.ac.id/api/api/ukmormawa.php",
           {
             params: {
               action: "getAnggota",
@@ -51,7 +51,7 @@ const DaftarAnggota = ({ idUkm }) => {
   }, [idUkm]);
 
   return (
-    <div className="grid grid-cols-4 grid-flow-row w-full justify-center">
+    <div className="grid grid-cols-4 grid-flow-row gap-3 w-full justify-center">
       {anggota.length > 0 ? (
         anggota.map((anggota) => (
           <div
@@ -168,7 +168,7 @@ const UkmPages = () => {
     const fetchUKM_User = async () => {
       try {
         const response = await axios.get(
-          "http://localhost/pweb-uas/api/ukmormawa.php",
+          "https://222410101074.pbw.ilkom.unej.ac.id/api/api/ukmormawa.php",
           {
             params: {
               action: "getAll",

@@ -23,12 +23,11 @@ const EditPeminjaman = ({ setApiResponse, setActiveButton, jabatan }) => {
   const [kegiatan, setKegiatan] = useState([]);
   const [dosen, setDosen] = useState([]);
 
+  const [peminjaman, setPeminjaman] = useState([]);
   const [optionsValue, setOptionsValue] = useState({
     kegiatan: null,
     dosen: null,
   });
-
-  const [peminjaman, setPeminjaman] = useState([]);
   const [initialOptionValue, setInitialOptionValue] = useState({
     dosen: null,
     kegiatan: null,
@@ -46,7 +45,7 @@ const EditPeminjaman = ({ setApiResponse, setActiveButton, jabatan }) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost/pweb-uas/api/peminjaman.php", {
+      .get("https://222410101074.pbw.ilkom.unej.ac.id/api/api/peminjaman.php", {
         params: {
           action: "getById",
           id_peminjaman: idPeminjaman,
@@ -79,7 +78,7 @@ const EditPeminjaman = ({ setApiResponse, setActiveButton, jabatan }) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost/pweb-uas/api/kegiatan.php", {
+      .get("https://222410101074.pbw.ilkom.unej.ac.id/api/api/kegiatan.php", {
         params: {
           action: "getByName",
           ukmName: name,
@@ -160,18 +159,21 @@ const EditPeminjaman = ({ setApiResponse, setActiveButton, jabatan }) => {
     console.log(a);
 
     axios
-      .post("http://localhost/pweb-uas/api/peminjaman.php", {
-        action: "updatePeminjaman",
-        id_peminjaman: idPeminjaman,
-        hal: peminjaman.hal,
-        tanggal: peminjaman.date
-          ? dayjs(peminjaman.date).format("YYYY-MM-DD")
-          : peminjaman.tanggal,
-        id_kegiatan: peminjaman.kegiatan
-          ? peminjaman.kegiatan
-          : peminjaman.id_kegiatan,
-        id_dosen: peminjaman.dosen ? peminjaman.dosen : peminjaman.id_dosen,
-      })
+      .post(
+        "https://222410101074.pbw.ilkom.unej.ac.id/api/api/peminjaman.php",
+        {
+          action: "updatePeminjaman",
+          id_peminjaman: idPeminjaman,
+          hal: peminjaman.hal,
+          tanggal: peminjaman.date
+            ? dayjs(peminjaman.date).format("YYYY-MM-DD")
+            : peminjaman.tanggal,
+          id_kegiatan: peminjaman.kegiatan
+            ? peminjaman.kegiatan
+            : peminjaman.id_kegiatan,
+          id_dosen: peminjaman.dosen ? peminjaman.dosen : peminjaman.id_dosen,
+        }
+      )
       .then((response) => {
         console.log(response.data);
         setApiResponse(response.data);

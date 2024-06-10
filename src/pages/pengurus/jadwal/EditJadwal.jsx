@@ -50,7 +50,7 @@ const EditJadwal = ({ setApiResponse, setActiveButton, jabatan }) => {
     console.log(idKegiatan);
 
     axios
-      .get("http://localhost/pweb-uas/api/lampiran.php", {
+      .get("https://222410101074.pbw.ilkom.unej.ac.id/api/api/lampiran.php", {
         params: {
           action: "getById",
           id_lampiran: idKegiatan,
@@ -77,7 +77,7 @@ const EditJadwal = ({ setApiResponse, setActiveButton, jabatan }) => {
     // TODO : Fix Waktu Selesai jika kosong terbaca 00.00
 
     axios
-      .post("http://localhost/pweb-uas/api/kegiatan.php", {
+      .post("https://222410101074.pbw.ilkom.unej.ac.id/api/api/kegiatan.php", {
         action: "updateJadwal",
         namaKegiatan: kegiatan.nama_kegiatan,
         tempat: kegiatan.tempat,

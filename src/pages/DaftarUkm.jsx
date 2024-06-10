@@ -27,7 +27,7 @@ const DaftarUkm = () => {
     const fetchUKM = async () => {
       try {
         const response = await axios.get(
-          "http://localhost/pweb-uas/api/ukmormawa.php",
+          "https://222410101074.pbw.ilkom.unej.ac.id/api/api/ukmormawa.php",
           {
             params: {
               action: action,

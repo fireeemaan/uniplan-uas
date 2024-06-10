@@ -26,7 +26,7 @@ const AddLampiran = ({ setApiResponse, setActiveButton }) => {
     // TODO : Fix Waktu Selesai jika kosong terbaca 00.00
     console.log(inputs);
     axios
-      .post("http://localhost/pweb-uas/api/lampiran.php", {
+      .post("https://222410101074.pbw.ilkom.unej.ac.id/api/api/lampiran.php", {
         action: "addLampiran",
         id_peminjaman: idPeminjaman,
         nama_barang: inputs.nama,

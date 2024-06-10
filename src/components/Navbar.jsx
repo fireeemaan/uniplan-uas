@@ -13,7 +13,7 @@ const TitleName = () => {
 
 const LandingPage = () => {
   return (
-    <div className="fixed flex z-50 top-0 items-center justify-between w-full px-10 py-3 shadow-md bg-slate-200">
+    <div className="fixed flex z-50 top-0 items-center justify-between w-full px-10 py-3 shadow-md">
       <TitleName />
       <div className="flex flex-row gap-2 font-semibold">
         <a

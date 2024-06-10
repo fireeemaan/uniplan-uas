@@ -51,7 +51,7 @@ function LoginPage() {
     event.preventDefault();
 
     axios
-      .post("http://localhost/pweb-uas/api/auth.php", {
+      .post("https://222410101074.pbw.ilkom.unej.ac.id/api/api/auth.php", {
         action: "login",
         username: username,
         password: password,
@@ -75,7 +75,7 @@ function LoginPage() {
   };
   return (
     <>
-      <div className="flex flex-col items-center w-full justify-center h-screen bg-slate-100">
+      <div className="flex flex-col items-center w-full justify-center h-screen">
         <div className="flex flex-col gap-2">
           <button
             className="flex flex-row items-center cursor-pointer gap-1"

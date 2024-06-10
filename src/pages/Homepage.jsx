@@ -34,7 +34,7 @@ const AdminMenu = () => {
       <MenuCard
         icon={<GrUserAdmin size="50px" />}
         className="col-start-2 row-start-2"
-        href="/admin"
+        href="/admin/home"
       >
         Halaman Admin
       </MenuCard>

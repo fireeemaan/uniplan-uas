@@ -41,7 +41,7 @@ const AddPeminjaman = ({ id_ukmormawa, setApiResponse, setActiveButton }) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost/pweb-uas/api/kegiatan.php", {
+      .get("https://222410101074.pbw.ilkom.unej.ac.id/api/api/kegiatan.php", {
         params: {
           action: "getByName",
           ukmName: name,
@@ -88,15 +88,18 @@ const AddPeminjaman = ({ id_ukmormawa, setApiResponse, setActiveButton }) => {
     console.log(inputs);
 
     axios
-      .post("http://localhost/pweb-uas/api/peminjaman.php", {
-        action: "addPeminjaman",
-        hal: inputs.hal,
-        tanggal: inputs.date ? dayjs(inputs.date).format("YYYY-MM-DD") : null,
-        id_kegiatan: inputs.kegiatan,
-        id_dosen: inputs.dosen,
-        id_ukmormawa: id_ukmormawa,
-        id_user: id,
-      })
+      .post(
+        "https://222410101074.pbw.ilkom.unej.ac.id/api/api/peminjaman.php",
+        {
+          action: "addPeminjaman",
+          hal: inputs.hal,
+          tanggal: inputs.date ? dayjs(inputs.date).format("YYYY-MM-DD") : null,
+          id_kegiatan: inputs.kegiatan,
+          id_dosen: inputs.dosen,
+          id_ukmormawa: id_ukmormawa,
+          id_user: id,
+        }
+      )
       .then((response) => {
         console.log(response.data);
         setApiResponse(response.data);

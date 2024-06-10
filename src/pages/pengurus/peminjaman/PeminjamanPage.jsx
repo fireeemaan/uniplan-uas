@@ -55,10 +55,13 @@ const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
     })
       .then(() => {
         axios
-          .post("http://localhost/pweb-uas/api/lampiran.php", {
-            action: "deleteLampiran",
-            id_lampiran: id_lampiran,
-          })
+          .post(
+            "https://222410101074.pbw.ilkom.unej.ac.id/api/api/lampiran.php",
+            {
+              action: "deleteLampiran",
+              id_lampiran: id_lampiran,
+            }
+          )
           .then((response) => {
             console.log(response);
             setApiResponse(response.data);
@@ -80,10 +83,13 @@ const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
     })
       .then(() => {
         axios
-          .post("http://localhost/pweb-uas/api/peminjaman.php", {
-            action: "deletePeminjaman",
-            id_peminjaman: id,
-          })
+          .post(
+            "https://222410101074.pbw.ilkom.unej.ac.id/api/api/peminjaman.php",
+            {
+              action: "deletePeminjaman",
+              id_peminjaman: id,
+            }
+          )
           .then((response) => {
             console.log(response);
             setApiResponse(response.data);
@@ -245,7 +251,7 @@ const PeminjamanPage = ({ setApiResponse, jabatan }) => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost/pweb-uas/api/peminjaman.php",
+        "https://222410101074.pbw.ilkom.unej.ac.id/api/api/peminjaman.php",
         {
           params: {
             action: "getAllByUKM",
