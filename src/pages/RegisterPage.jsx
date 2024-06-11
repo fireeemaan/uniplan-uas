@@ -16,6 +16,7 @@ function RegisterPage() {
   const [apiResponse, setApiResponse] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [ukmormawa, setUkmormawa] = useState([]);
+  const [prodi, setProdi] = useState([]);
 
   useEffect(() => {
     if (apiResponse.status) {
@@ -38,6 +39,23 @@ function RegisterPage() {
       .then((response) => {
         console.log(response.data.data.ukmormawa);
         setUkmormawa(response.data.data.ukmormawa);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get("https://222410101074.pbw.ilkom.unej.ac.id/api/api/prodi.php", {
+        params: {
+          action: "getAllProdi",
+        },
+      })
+      .then((response) => {
+        const dataProdi = response.data.data.prodi;
+        console.log(dataProdi);
+        setProdi(dataProdi);
       })
       .catch((error) => {
         console.error(error);
@@ -68,10 +86,14 @@ function RegisterPage() {
   };
 
   const handleAutoCompleteChange = (event, value, field) => {
-    setInputs((values) => ({
-      ...values,
-      [field]: value.map((option) => option.id),
-    }));
+    if (Array.isArray(value)) {
+      setInputs((values) => ({
+        ...values,
+        [field]: value.map((option) => option.id),
+      }));
+    } else {
+      setInputs((values) => ({ ...values, [field]: value ? value.id : null }));
+    }
 
     console.log(inputs);
   };
@@ -79,13 +101,14 @@ function RegisterPage() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    console.log(inputs.name);
+    console.log(inputs);
 
     axios
       .post("https://222410101074.pbw.ilkom.unej.ac.id/api/api/auth.php", {
         action: "register",
         name: inputs.name,
         nim: inputs.nim,
+        prodi: inputs.prodi,
         phone: inputs.phone,
         username: inputs.username,
         email: inputs.email,
@@ -125,10 +148,10 @@ function RegisterPage() {
           <h1>Back</h1>
         </button>
 
-        <Box className="px-4 py-10 rounded-md shadow-lg bg-slate-200">
+        <Box className="px-4 py-8 rounded-md shadow-lg bg-slate-200">
           <Container sx={{ width: 500 }}>
-            <div className="flex flex-col gap-8 bg-slate-200">
-              <h1 className="m-0 text-2xl font-bold text-center text-slate-900">
+            <div className="flex flex-col gap-4 bg-slate-200">
+              <h1 className="m-0 text-2xl font-bold text-center text-slate-900 bg-re">
                 Register
               </h1>
 
@@ -153,6 +176,20 @@ function RegisterPage() {
                   label="NIM"
                   variant="outlined"
                   required
+                />
+                <Autocomplete
+                  id="prodi"
+                  options={prodi}
+                  getOptionLabel={(option) => option.prodi}
+                  isOptionEqualToValue={(option, value) =>
+                    option.prodi === value.prodi
+                  }
+                  onChange={(event, value) =>
+                    handleAutoCompleteChange(event, value, "prodi")
+                  }
+                  renderInput={(params) => (
+                    <TextField {...params} label="Prodi" size="small" />
+                  )}
                 />
                 <TextField
                   onChange={handleInputChange}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Tabs, Tab, Button } from "@mui/material";
+import { Tabs, Tab, Button, Typography } from "@mui/material";
 import axios from "axios";
 import classNames from "classnames";
 import TableData from "../components/TableData";
@@ -51,7 +51,7 @@ const DaftarAnggota = ({ idUkm }) => {
   }, [idUkm]);
 
   return (
-    <div className="grid grid-cols-4 grid-flow-row gap-3 w-full justify-center">
+    <div className="grid grid-cols-3 grid-flow-row gap-3 w-full justify-center">
       {anggota.length > 0 ? (
         anggota.map((anggota) => (
           <div
@@ -99,19 +99,23 @@ const UkmPages = () => {
   };
 
   // const ukmData = JSON.parse(sessionStorage.getItem("ukm"));
-  console.log(id_role);
+  // console.log(id_role);
+  console.log(ukmUser);
   let findUkm;
   if (id_role === "1") {
     findUkm = ukmUser.find((ukm) => ukm.singkatan.toLowerCase() === name);
+    if (!findUkm) {
+      findUkm = ukm.find((ukm) => ukm.singkatan.toLowerCase() === name);
+    }
   }
   if (id_role === "2") {
     findUkm = ukm.find((ukm) => ukm.singkatan.toLowerCase() === name);
   }
 
-  // console.log(findUkm);
+  console.log(findUkm);
 
   if (findUkm) {
-    console.log(findUkm.jabatan);
+    // console.log(findUkm.jabatan);
     idUkm = findUkm.id;
     abbrevation = findUkm.singkatan;
     ukmName = findUkm.nama;
@@ -274,90 +278,108 @@ const UkmPages = () => {
 
           <h1 className="text-2xl font-bold text-center">{ukmName}</h1>
           {buttons}
-          {activeButton === "home" && (
-            <div>
-              {jabatan != null && jabatan.toLowerCase() === "pengurus" && (
-                <div className="flex flex-row justify-end">
-                  <Button
-                    variant="contained"
-                    onClick={() => handleButtonClick("tambah-kegiatan")}
-                  >
-                    Tambah
-                  </Button>
-                </div>
-              )}
+          <div className="flex flex-col bg-white border shadow-lg w-full rounded-lg px-16 pb-10 pt-5 items-center mt-10">
+            {activeButton === "home" && (
+              <div>
+                {jabatan != null && jabatan.toLowerCase() === "pengurus" && (
+                  <div className="flex flex-row justify-end">
+                    <Button
+                      variant="contained"
+                      onClick={() => handleButtonClick("tambah-kegiatan")}
+                    >
+                      Tambah
+                    </Button>
+                  </div>
+                )}
 
-              <div className="flex flex-col shadow-lg border border-black/10 rounded-xl mt-3">
-                <TableData jabatan={jabatan} setApiResponse={setApiResponse} />
-              </div>
-            </div>
-          )}
-          {activeButton === "anggota" && (
-            <div className="flex flex-col w-full rounded-xl mt-3">
-              <DaftarAnggota idUkm={idUkm} />
-            </div>
-          )}
-          {activeButton === "tambah-kegiatan" && (
-            <AddJadwal
-              id_ukmormawa={idUkm}
-              setApiResponse={setApiResponse}
-              setActiveButton={setActiveButton}
-            />
-          )}
-          {activeButton === "edit-kegiatan" && (
-            <EditJadwal
-              setApiResponse={setApiResponse}
-              setActiveButton={setActiveButton}
-              jabatan={jabatan}
-            />
-          )}
-          {activeButton === "peminjaman" && (
-            <div>
-              {jabatan != null && jabatan.toLowerCase() === "pengurus" && (
-                <div className="flex flex-row justify-end">
-                  <Button
-                    variant="contained"
-                    onClick={() => handleButtonClick("tambah-peminjaman")}
-                  >
-                    Tambah
-                  </Button>
+                <div className="flex flex-col shadow-lg border border-black/10 rounded-xl mt-3">
+                  <TableData
+                    jabatan={jabatan}
+                    setApiResponse={setApiResponse}
+                  />
                 </div>
-              )}
-
-              <div className="flex flex-col shadow-lg border border-black/10 rounded-xl mt-3">
-                <PeminjamanPage
-                  jabatan={jabatan}
-                  setApiResponse={setApiResponse}
-                />
               </div>
-            </div>
-          )}
-          {activeButton === "tambah-peminjaman" && (
-            <AddPeminjaman
-              id_ukmormawa={idUkm}
-              setApiResponse={setApiResponse}
-              setActiveButton={setActiveButton}
-            />
-          )}
-          {activeButton === "edit-peminjaman" && (
-            <EditPeminjaman
-              setApiResponse={setApiResponse}
-              setActiveButton={setActiveButton}
-              jabatan={jabatan}
-            />
-          )}
-          {activeButton === "lampiran" && (
-            <AddLampiran
-              setApiResponse={setApiResponse}
-              setActiveButton={setActiveButton}
-            />
-          )}
-          {activeButton === "edit-lampiran" && (
-            <EditLampiran
-              setApiResponse={setApiResponse}
-              setActiveButton={setActiveButton}
-            />
-          )}
+            )}
+            {activeButton === "anggota" && (
+              <div className="flex flex-col w-full rounded-xl ">
+                <Typography
+                  textAlign="center"
+                  variant="h6"
+                  fontWeight={"bold"}
+                  marginBottom={2}
+                  padding={0.5}
+                  sx={{
+                    borderRadius: 3,
+                  }}
+                  className="text-black/90 bg-slate-300/5 border border-black/10 shadow-md"
+                >
+                  Daftar Anggota
+                </Typography>
+                <DaftarAnggota idUkm={idUkm} />
+              </div>
+            )}
+            {activeButton === "tambah-kegiatan" && (
+              <AddJadwal
+                id_ukmormawa={idUkm}
+                setApiResponse={setApiResponse}
+                setActiveButton={setActiveButton}
+              />
+            )}
+            {activeButton === "edit-kegiatan" && (
+              <EditJadwal
+                setApiResponse={setApiResponse}
+                setActiveButton={setActiveButton}
+                jabatan={jabatan}
+              />
+            )}
+            {activeButton === "peminjaman" && (
+              <div>
+                {jabatan != null && jabatan.toLowerCase() === "pengurus" && (
+                  <div className="flex flex-row justify-end">
+                    <Button
+                      variant="contained"
+                      onClick={() => handleButtonClick("tambah-peminjaman")}
+                    >
+                      Tambah
+                    </Button>
+                  </div>
+                )}
+
+                <div className="flex flex-col shadow-lg border border-black/10 rounded-xl mt-3">
+                  <PeminjamanPage
+                    jabatan={jabatan}
+                    setApiResponse={setApiResponse}
+                  />
+                </div>
+              </div>
+            )}
+            {activeButton === "tambah-peminjaman" && (
+              <AddPeminjaman
+                id_ukmormawa={idUkm}
+                setApiResponse={setApiResponse}
+                setActiveButton={setActiveButton}
+              />
+            )}
+            {activeButton === "edit-peminjaman" && (
+              <EditPeminjaman
+                setApiResponse={setApiResponse}
+                setActiveButton={setActiveButton}
+                jabatan={jabatan}
+              />
+            )}
+            {activeButton === "lampiran" && (
+              <AddLampiran
+                setApiResponse={setApiResponse}
+                setActiveButton={setActiveButton}
+              />
+            )}
+            {activeButton === "edit-lampiran" && (
+              <EditLampiran
+                setApiResponse={setApiResponse}
+                setActiveButton={setActiveButton}
+              />
+            )}
+          </div>
         </div>
       </div>
     </>

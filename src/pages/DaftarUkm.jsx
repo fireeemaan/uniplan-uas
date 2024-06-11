@@ -54,18 +54,18 @@ const DaftarUkm = () => {
   return (
     <>
       <Navbar type="home" name={name} />
-      <div className="flex flex-col items-center justify-center h-screen">
+      <div className="flex flex-col items-center mt-36 h-screen">
         <div>
           <div className="w-full mb-3">
             <h1 className="text-2xl font-bold text-left">
               Daftar UKM / Ormawa
             </h1>
           </div>
-          <div className="grid items-center justify-center grid-flow-row grid-cols-3 gap-3 ">
+          <div className="grid items-center justify-center grid-flow-row grid-cols-3 gap-6 mb-14">
             {ukm.map((item) => (
               <a
                 key={item.id}
-                className="group flex flex-col items-center justify-start w-full h-full rounded-lg shadow-md cursor-pointer bg-white border border-black/5 "
+                className="group flex flex-col items-center justify-start w-full h-full rounded-lg shadow-md cursor-pointer bg-white border border-black/10 "
                 href={`/ukm-ormawa/${item.singkatan.toLowerCase()}`}
               >
                 <div className="z-10 w-full rounded-t-lg bg-white h-44">
