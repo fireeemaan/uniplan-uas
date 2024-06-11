@@ -53,8 +53,9 @@ const DaftarUkm = () => {
 
   return (
     <>
-      <Navbar type="home" name={name} />
-      <div className="flex flex-col items-center mt-36 h-screen">
+      <Navbar type="home" name={name} roles={id_roles} />
+      <div className="w-full h-36 bg-slate-100"></div>
+      <div className="flex flex-col items-center h-full bg-slate-100">
         <div>
           <div className="w-full mb-3">
             <h1 className="text-2xl font-bold text-left">

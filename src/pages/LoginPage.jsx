@@ -11,6 +11,7 @@ import { Alert, IconButton } from "@mui/material";
 import toast from "react-hot-toast";
 import { FaAngleLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import bgImage from "../assets/bg-cover.png";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -23,6 +24,10 @@ function LoginPage() {
 
   const handleBack = () => {
     navigate("/");
+  };
+
+  const handleRedirect = (to) => {
+    navigate(to);
   };
 
   useEffect(() => {
@@ -64,7 +69,8 @@ function LoginPage() {
             "userData",
             JSON.stringify(response.data.data)
           );
-          window.location.href = "/homepage";
+          // window.location.href = "/homepage";
+          navigate("/homepage");
         } else {
           setApiResponse(response.data);
         }
@@ -75,14 +81,27 @@ function LoginPage() {
   };
   return (
     <>
-      <div className="flex flex-col items-center w-full justify-center h-screen">
-        <div className="flex flex-col gap-2">
+      <div className="flex flex-col items-center w-full justify-center h-screen bg-black">
+        <div
+          className="absolute inset-0 z-0 blur-sm"
+          style={{
+            backgroundImage: `url(${bgImage})`,
+          }}
+        ></div>
+        <div
+          className="absolute inset-0 z-0 blur-md"
+          style={{
+            backgroundColor: "black",
+            opacity: 0.5,
+          }}
+        ></div>
+        <div className="flex flex-col gap-2 z-10">
           <button
             className="flex flex-row items-center cursor-pointer gap-1"
             onClick={handleBack}
           >
-            <FaAngleLeft />
-            <h1>Back</h1>
+            <FaAngleLeft color="white" />
+            <h1 className="text-white">Back</h1>
           </button>
 
           <Box className="flex flex-col px-4 py-10 rounded-md shadow-lg bg-slate-200">

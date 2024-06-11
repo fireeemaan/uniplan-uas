@@ -8,9 +8,15 @@ import { FaCalendarAlt } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 
 const RegularMenu = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate("/ukm-ormawa");
+  });
+
   return (
     <div className="grid w-full h-screen grid-cols-4 grid-rows-3 gap-5 bg-slate-100">
-      <MenuCard
+      {/* <MenuCard
         icon={<FaPeopleGroup size="50px" />}
         className="col-start-2 row-start-2"
         href="/ukm-ormawa"
@@ -23,14 +29,14 @@ const RegularMenu = () => {
         href="/jadwal-kegiatan"
       >
         Jadwal Kegiatan
-      </MenuCard>
+      </MenuCard> */}
     </div>
   );
 };
 
 const AdminMenu = () => {
   return (
-    <div className="grid w-full h-screen grid-cols-5 grid-rows-3 gap-5 bg-slate-100">
+    <div className="grid w-full h-screen grid-cols-4 grid-rows-3 gap-5 bg-slate-100">
       <MenuCard
         icon={<GrUserAdmin size="50px" />}
         className="col-start-2 row-start-2"
@@ -45,13 +51,13 @@ const AdminMenu = () => {
       >
         UKM / Ormawa
       </MenuCard>
-      <MenuCard
+      {/* <MenuCard
         icon={<FaCalendarAlt size="50px" />}
         className="col-start-4 row-start-2"
         href="/jadwal-kegiatan"
       >
         Jadwal Kegiatan
-      </MenuCard>
+      </MenuCard> */}
     </div>
   );
 };
@@ -62,6 +68,7 @@ function Homepage() {
   const userData = JSON.parse(sessionStorage.getItem("userData"));
   console.log(userData);
   const name = userData?.userData.nama;
+  const id_roles = userData?.userData.id_roles;
   console.log(name);
 
   useEffect(() => {
@@ -73,7 +80,7 @@ function Homepage() {
 
   return (
     <>
-      <Navbar type="home" name={name} />
+      <Navbar type="home" name={name} roles={id_roles} />
       {userData?.userData.id_roles === "2" ? <AdminMenu /> : <RegularMenu />}
     </>
   );

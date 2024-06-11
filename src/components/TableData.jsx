@@ -73,7 +73,7 @@ const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
 
   return (
     <>
-      <TableRow>
+      <TableRow sx={{ backgroundColor: "white" }}>
         <TableCell sx={{ maxWidth: 20, minWidth: 20 }}>
           <IconButton
             aria-label="expand row"
@@ -203,7 +203,7 @@ const TableData = ({ setApiResponse, jabatan }) => {
                 />
               ))
           ) : (
-            <TableRow>
+            <TableRow sx={{ backgroundColor: "white" }}>
               <TableCell colSpan={6} align="center">
                 <h1 className="text-lg font-bold">Tidak Ada Kegiatan</h1>
               </TableCell>

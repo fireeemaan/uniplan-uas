@@ -38,7 +38,7 @@ const Row = ({ props, fetchData, setApiResponse, index }) => {
 
   return (
     <>
-      <TableRow>
+      <TableRow sx={{ backgroundColor: "white" }}>
         <TableCell align="left" sx={{ width: 10 }}></TableCell>
         <TableCell align="left">{index}.</TableCell>
         <TableCell align="left" sx={{ maxWidth: 100 }}>
@@ -52,9 +52,11 @@ const Row = ({ props, fetchData, setApiResponse, index }) => {
             spacing={1}
             divider={<Divider orientation="vertical" flexItem />}
           >
-            <IconButton color="info" onClick={() => handleShow(row.id)}>
-              <IoMdEye />
-            </IconButton>
+            <Tooltip title="Lihat UKM/Ormawa Yang Diikuti">
+              <IconButton color="info" onClick={() => handleShow(row.id)}>
+                <IoMdEye />
+              </IconButton>
+            </Tooltip>
           </Stack>
         </TableCell>
       </TableRow>

@@ -10,6 +10,7 @@ import { Height, Visibility, VisibilityOff } from "@mui/icons-material";
 import { FaAngleLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import bgImage from "../assets/bg-cover.png";
 
 function RegisterPage() {
   const [inputs, setInputs] = useState({});
@@ -125,27 +126,27 @@ function RegisterPage() {
       });
   };
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-slate-100">
-      {/* {apiResponse && (
-        <Alert
-          variant="outlined"
-          className="mb-5"
-          severity={apiResponse.includes("success") ? "success" : "error"}
-          sx={{ width: "40%" }}
-        >
-          {apiResponse}
-        </Alert>
-      )}
-
-      {/* redirect to login page when success */}
-      {/* {apiResponse.includes("success") && handleSucessResponse()} */}
-      <div className="flex flex-col gap-2">
+    <div className="flex flex-col items-center justify-center h-screen bg-black">
+      <div
+        className="absolute inset-0 z-0 blur-sm"
+        style={{
+          backgroundImage: `url(${bgImage})`,
+        }}
+      ></div>
+      <div
+        className="absolute inset-0 z-0 blur-md"
+        style={{
+          backgroundColor: "black",
+          opacity: 0.5,
+        }}
+      ></div>
+      <div className="flex flex-col gap-2 z-10">
         <button
           className="flex flex-row items-center cursor-pointer gap-1"
           onClick={handleBack}
         >
-          <FaAngleLeft />
-          <h1>Back</h1>
+          <FaAngleLeft color="white" />
+          <h1 className="text-white">Back</h1>
         </button>
 
         <Box className="px-4 py-8 rounded-md shadow-lg bg-slate-200">

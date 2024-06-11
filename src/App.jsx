@@ -13,7 +13,7 @@ import { ConfirmProvider } from "material-ui-confirm";
 function App() {
   return (
     <ConfirmProvider>
-      <div class="maincontainer">
+      <div class="maincontainer bg-slate-100 min-h-screen">
         <Toaster
           position="top-right"
           reverseOrder={false}

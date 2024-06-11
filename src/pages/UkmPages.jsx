@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Tabs, Tab, Button, Typography } from "@mui/material";
+import { Tabs, Tab, Button, Typography, Tooltip } from "@mui/material";
 import axios from "axios";
 import classNames from "classnames";
 import TableData from "../components/TableData";
@@ -50,25 +50,60 @@ const DaftarAnggota = ({ idUkm }) => {
     fetchAnggota();
   }, [idUkm]);
 
+  const truncateText = (text, length = 15) => {
+    if (!text || text.length <= length) {
+      return text || "";
+    }
+
+    const words = text.split(" ");
+
+    let truncated = "";
+    let remainingLength = length;
+
+    for (let i = 0; i < words.length; i++) {
+      if (truncated.length + words[i].length <= remainingLength) {
+        truncated += words[i] + " ";
+      } else {
+        truncated += words[i].charAt(0) + "." + " ";
+      }
+    }
+    return truncated.trim();
+  };
+
+  const AnggotaCard = ({ anggota }) => {
+    return (
+      <div className="flex flex-row p-3 border border-black/10 bg-white shadow-lg w-full rounded-lg items-center hover:bg-gray-50 ease-in-out transition-all">
+        <div className="flex rounded-full bg-gray-200 size-12 justify-center items-center">
+          <IoPerson className="text-gray-400 text-2xl" />
+        </div>
+        <div className="w-full">
+          <div className="flex flex-row items-center justify-between w-full">
+            <h1 className="text-sm font-bold ml-3">
+              {truncateText(anggota.nama)}
+            </h1>
+            <h1 className="text-xs ml-3 font-bold">{anggota.jabatan}</h1>
+          </div>
+          <h1 className="text-xs ml-3 text-gray-600">{anggota.nim}</h1>
+          <h1 className="text-xs ml-3 text-gray-500">{anggota.prodi}</h1>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="grid grid-cols-3 grid-flow-row gap-3 w-full justify-center">
       {anggota.length > 0 ? (
         anggota.map((anggota) => (
-          <div
-            key={anggota.id}
-            className="flex flex-row p-3 border border-black/10 shadow-lg w-full rounded-lg items-center hover:bg-gray-400/5 ease-in-out transition-all"
-          >
-            <div className="flex rounded-full bg-gray-200 size-12 justify-center items-center">
-              <IoPerson className="text-gray-400 text-2xl" />
-            </div>
-            <div className="w-full">
-              <div className="flex flex-row items-center justify-between w-full">
-                <h1 className="text-sm font-bold ml-3">{anggota.nama}</h1>
-                <h1 className="text-xs ml-3 font-bold">{anggota.jabatan}</h1>
-              </div>
-              <h1 className="text-xs ml-3 text-gray-600">{anggota.nim}</h1>
-              <h1 className="text-xs ml-3 text-gray-500">{anggota.prodi}</h1>
-            </div>
+          <div key={anggota.id}>
+            {anggota.nama.length > 15 ? (
+              <Tooltip title={anggota.nama}>
+                <div>
+                  <AnggotaCard anggota={anggota}></AnggotaCard>
+                </div>
+              </Tooltip>
+            ) : (
+              <AnggotaCard anggota={anggota}></AnggotaCard>
+            )}
           </div>
         ))
       ) : (
@@ -261,9 +296,9 @@ const UkmPages = () => {
 
   return (
     <>
-      <Navbar type="home" name={userData.userData.nama} />
+      <Navbar type="home" name={userData.userData.nama} roles={id_role} />
       <div className="flex flex-col mt-4 items-center justify-center w-full p-10">
-        <div className="flex flex-col bg-white w-full items-center mt-10">
+        <div className="flex flex-col bg-slate-100 w-full items-center mt-10">
           <div className="w-full">
             <Button
               className=""
@@ -278,7 +313,7 @@ const UkmPages = () => {
 
           <h1 className="text-2xl font-bold text-center">{ukmName}</h1>
           {buttons}
-          <div className="flex flex-col bg-white border shadow-lg w-full rounded-lg px-16 pb-10 pt-5 items-center mt-10">
+          <div className="flex flex-col bg-slate-100 w-full rounded-lg px-12 pb-10 pt-5 items-center">
             {activeButton === "home" && (
               <div>
                 {jabatan != null && jabatan.toLowerCase() === "pengurus" && (
@@ -301,7 +336,7 @@ const UkmPages = () => {
               </div>
             )}
             {activeButton === "anggota" && (
-              <div className="flex flex-col w-full rounded-xl ">
+              <div className="flex flex-col w-full rounded-xl bg-white p-5">
                 <Typography
                   textAlign="center"
                   variant="h6"
@@ -311,7 +346,7 @@ const UkmPages = () => {
                   sx={{
                     borderRadius: 3,
                   }}
-                  className="text-black/90 bg-slate-300/5 border border-black/10 shadow-md"
+                  className="text-black/90 bg-white border border-black/10 shadow-md"
                 >
                   Daftar Anggota
                 </Typography>

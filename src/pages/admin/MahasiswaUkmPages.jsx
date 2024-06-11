@@ -8,6 +8,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useConfirm } from "material-ui-confirm";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { IoMdEye } from "react-icons/io";
+import { IoPerson } from "react-icons/io5";
 import {
   Collapse,
   Divider,
@@ -73,7 +74,7 @@ const MahasiswaUkmPages = ({ setApiResponse }) => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "https://222410101074.pbw.ilkom.unej.ac.id/api/api/ukmOrmawa.php",
+        "https://222410101074.pbw.ilkom.unej.ac.id/api/api/ukmormawa.php",
         {
           params: {
             action: "getByUser",
@@ -95,17 +96,28 @@ const MahasiswaUkmPages = ({ setApiResponse }) => {
   }, [name]);
   return (
     <>
-      <div className="flex flex-col p-6 rounded-lg mb-4 shadow-lg border border-black/5">
-        <Typography variant="h8" sx={{ fontWeight: "bold" }}>
-          {user.nama}
-        </Typography>
-        <Typography color="#474747" sx={{ fontSize: 15 }}>
-          {user.prodi}
-        </Typography>
-        <Typography color="#a6a6a6" sx={{ fontSize: 15 }}>
-          {user.nim}
-        </Typography>
+      <div className="flex flex-row p-4 gap-5 rounded-lg mb-4 shadow-lg border border-black/10">
+        <div className="flex p-2 size-16 rounded-full bg-gray-200 justify-center items-center">
+          <IoPerson size="30px" color="grey" />
+        </div>
+        <div className="flex flex-col justify-center">
+          <Typography variant="h8" sx={{ fontWeight: "bold" }}>
+            {user.nama}
+          </Typography>
+          <Typography color="#474747" sx={{ fontSize: 15 }}>
+            {user.prodi}
+          </Typography>
+          <Typography color="#a6a6a6" sx={{ fontSize: 15 }}>
+            {user.nim}
+          </Typography>
+        </div>
       </div>
+      <Typography
+        variant="h6"
+        sx={{ fontWeight: "bold", marginBottom: "10px", marginTop: "20px" }}
+      >
+        UKM / Ormawa Yang Diikuti :
+      </Typography>
       <TableContainer
         sx={{
           borderRadius: "12px",

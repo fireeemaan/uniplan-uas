@@ -13,7 +13,6 @@ import MahasiswaUkmPages from "./MahasiswaUkmPages";
 import EditJabatan from "./EditJabatan";
 
 const userData = JSON.parse(sessionStorage.getItem("userData"));
-const id = userData?.userData.id;
 const id_role = userData?.userData.id_roles;
 
 function AdminDashboard() {
@@ -42,7 +41,7 @@ function AdminDashboard() {
   };
 
   const buttons = (
-    <div className="grid grid-cols-6 text-xl gap-4 font-bold mx-24 mt-8 w-full mb-5">
+    <div className="grid grid-cols-6 text-xl gap-4 font-bold mx-24 mt-8 w-full mb-5 bg-slate-100">
       <Button
         variant={activeButton === "mahasiswa" ? "contained" : "outlined"}
         className="col-start-3"
@@ -72,9 +71,9 @@ function AdminDashboard() {
 
   return (
     <>
-      <Navbar type="home" name={userData.userData.nama} />
+      <Navbar type="home" name={userData.userData.nama} roles={id_role} />
       <div className="flex flex-col mt-4 items-center justify-center w-full p-10">
-        <div className="flex flex-col bg-white w-full items-center mt-10">
+        <div className="flex flex-col bg-slate-100 w-full items-center mt-10">
           <div className="w-full">
             <Button
               className=""
