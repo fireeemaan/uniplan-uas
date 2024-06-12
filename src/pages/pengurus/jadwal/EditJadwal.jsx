@@ -47,7 +47,7 @@ const EditJadwal = ({ setApiResponse, setActiveButton, jabatan }) => {
   });
 
   useEffect(() => {
-    console.log(idKegiatan);
+    // console.log(idKegiatan);
 
     axios
       .get("https://222410101074.pbw.ilkom.unej.ac.id/api/api/kegiatan.php", {

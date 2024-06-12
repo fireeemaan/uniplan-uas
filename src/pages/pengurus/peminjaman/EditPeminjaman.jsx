@@ -152,7 +152,7 @@ const EditPeminjaman = ({ setApiResponse, setActiveButton, jabatan }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    console.log(peminjaman);
+    // console.log(peminjaman);
     const a = peminjaman.date
       ? dayjs(peminjaman.date).format("YYYY-MM-DD")
       : peminjaman.tanggal;

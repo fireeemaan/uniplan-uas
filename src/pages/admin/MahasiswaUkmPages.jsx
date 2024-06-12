@@ -66,10 +66,11 @@ const Row = ({ props, fetchData, setApiResponse, index }) => {
   );
 };
 
-const MahasiswaUkmPages = ({ setApiResponse }) => {
+const MahasiswaUkmPages = () => {
   const [ukmormawa, setUkmormawa] = useState([]);
   const [user, setUser] = useState([]);
   const [activePage, setActivePage] = useState("mahasiswa-ukm");
+  const [apiResponse, setApiResponse] = useState({});
 
   const navigate = useNavigate();
 
@@ -80,6 +81,18 @@ const MahasiswaUkmPages = ({ setApiResponse }) => {
       setActivePage("mahasiswa-ukm-edit");
     }
   }, [name, idMahasiswa, idUkmMhs]);
+
+  useEffect(() => {
+    if (Object.keys(apiResponse).length > 0) {
+      console.log(apiResponse.status);
+      if (apiResponse.status === "success") {
+        toast.success(apiResponse.message);
+      } else if (apiResponse.status === "error") {
+        toast.error(apiResponse.message);
+      }
+      setApiResponse({});
+    }
+  });
 
   const fetchData = async () => {
     try {
@@ -123,7 +136,7 @@ const MahasiswaUkmPages = ({ setApiResponse }) => {
         </div>
       </div>
       {activePage === "mahasiswa-ukm-edit" ? (
-        <EditUKMOrmawa />
+        <EditUKMOrmawa setActivePage={setActivePage} />
       ) : (
         <>
           <Typography

@@ -82,7 +82,7 @@ function AdminDashboard() {
               onClick={handleBack}
             >
               <FaAngleLeft />
-              <h1>Back</h1>
+              <h1>Back To Home</h1>
             </Button>
           </div>
 
@@ -95,7 +95,7 @@ function AdminDashboard() {
           )}
           {activeButton === "mahasiswa-ukm" && (
             <div className="flex flex-col mt-3">
-              <MahasiswaUkmPages setApiResponse={setApiResponse} />
+              <MahasiswaUkmPages />
             </div>
           )}
           {/* {activeButton === "mahasiswa-ukm-edit" && (
