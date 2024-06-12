@@ -117,7 +117,7 @@ const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
           ) : null}
         </TableCell>
       </TableRow>
-      <TableRow>
+      <TableRow sx={{ backgroundColor: "white" }}>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Table size="small" aria-label="purchases">
@@ -160,7 +160,7 @@ const TableData = ({ setApiResponse, jabatan }) => {
           },
         }
       );
-      // console.log(response.data.data);
+      console.log(response.data.data);
       setData(response.data.data.jadwal);
       setLoading(false);
     } catch (error) {

@@ -380,7 +380,7 @@ const UkmPages = () => {
                   </div>
                 )}
 
-                <div className="flex flex-col shadow-lg border border-black/10 rounded-xl mt-3">
+                <div className="flex flex-col shadow-lg border border-black/10 bg-white rounded-xl mt-3">
                   <PeminjamanPage
                     jabatan={jabatan}
                     setApiResponse={setApiResponse}

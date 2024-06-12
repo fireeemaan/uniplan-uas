@@ -10,7 +10,7 @@ import Navbar from "../../components/Navbar";
 import toast from "react-hot-toast";
 import MahasiswaPages from "./MahasiswaPages";
 import MahasiswaUkmPages from "./MahasiswaUkmPages";
-import EditJabatan from "./EditJabatan";
+import EditUKMOrmawa from "./EditUKMOrmawa";
 
 const userData = JSON.parse(sessionStorage.getItem("userData"));
 const id_role = userData?.userData.id_roles;
@@ -100,7 +100,7 @@ function AdminDashboard() {
           )}
           {/* {activeButton === "mahasiswa-ukm-edit" && (
             <div className="flex flex-col mt-3">
-              <EditJabatan
+              <EditUKMOrmawa
                 setApiResponse={setApiResponse}
                 setActiveButton={setActiveButton}
               />

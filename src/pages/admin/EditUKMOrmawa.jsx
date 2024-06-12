@@ -12,11 +12,12 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import Autocomplete from "@mui/material/Autocomplete";
 
-const EditJabatan = ({ setApiResponse, setActiveButton }) => {
+const EditUKMOrmawa = ({ setApiResponse, setActiveButton }) => {
   const [jabatan, setJabatan] = useState([]);
 
   const [optionsValue, setOptionsValue] = useState({
     jabatan: null,
+    ukmormawa: null,
   });
   const [initialOptionValue, setInitialOptionValue] = useState({
     jabatan: null,
@@ -31,19 +32,28 @@ const EditJabatan = ({ setApiResponse, setActiveButton }) => {
       })
       .then((response) => {
         const dataJabatan = response.data.data.jabatan;
-
         console.log(dataJabatan);
-
-        const optionsJabatan = dataJabatan.map((option) => {
-          const firstLetter = option.jabatan[0].toUpperCase();
-          return {
-            firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
-            ...option,
-          };
-        });
-
         setOptionsValue({
-          jabatan: optionsJabatan,
+          ...optionsValue,
+          jabatan: dataJabatan,
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    axios
+      .get("https://222410101074.pbw.ilkom.unej.ac.id/api/api/ukmormawa.php", {
+        params: {
+          action: "getAllUKM",
+        },
+      })
+      .then((response) => {
+        const dataUkmormawa = response.data.data.ukmormawa;
+        console.log(dataUkmormawa);
+        setOptionsValue({
+          ...optionsValue,
+          ukmormawa: dataUkmormawa,
         });
       })
       .catch((error) => {
@@ -54,15 +64,15 @@ const EditJabatan = ({ setApiResponse, setActiveButton }) => {
   const handleSubmit = (event) => {};
 
   return (
-    <Box className="flex flex-col gap-2 bg-white p-5 rounded-lg shadow-lg border border-black/10">
-      <h1 className="font-bold">Edit Jadwal</h1>
+    <Box
+      sx={{ width: 1000 }}
+      className="flex flex-col gap-2 bg-white p-5 rounded-lg shadow-lg border border-black/10"
+    >
+      <h1 className="font-bold">Edit UKM / Ormawa</h1>
       <form className="flex flex-col gap-5">
         <Autocomplete
           id="jabatan"
-          options={optionsValue.jabatan.sort(
-            (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
-          )}
-          groupBy={(option) => option.firstLetter}
+          options={optionsValue.jabatan}
           getOptionLabel={(option) => option.jabatan}
           isOptionEqualToValue={(option, value) =>
             option.jabatan === value.jabatan
@@ -71,13 +81,9 @@ const EditJabatan = ({ setApiResponse, setActiveButton }) => {
             handleAutoCompleteChange(event, value, "jabatan")
           }
           renderInput={(params) => (
-            <TextField {...params} label="Dosen Tertuju" size="small" />
+            <TextField {...params} label="Jabatan" size="small" />
           )}
         />
-        <Button variant="contained" onClick={handleSubmit}>
-          Submit
-        </Button>
-
         <Button variant="contained" onClick={handleSubmit}>
           Submit
         </Button>
@@ -86,4 +92,4 @@ const EditJabatan = ({ setApiResponse, setActiveButton }) => {
   );
 };
 
-export default EditJabatan;
+export default EditUKMOrmawa;

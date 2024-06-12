@@ -124,9 +124,9 @@ const MahasiswaPages = ({ setApiResponse }) => {
                 />
               ))
           ) : (
-            <TableRow>
+            <TableRow sx={{ backgroundColor: "white" }}>
               <TableCell colSpan={6} align="center">
-                <h1 className="text-lg font-bold">Tidak Ada Kegiatan</h1>
+                <h1 className="text-lg font-bold">Tidak Ada Mahasiswa</h1>
               </TableCell>
             </TableRow>
           )}

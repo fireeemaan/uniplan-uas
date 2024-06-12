@@ -111,7 +111,7 @@ const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
 
   return (
     <>
-      <TableRow>
+      <TableRow sx={{ backgroundColor: "white" }}>
         <TableCell sx={{ maxWidth: 50, minWidth: 50 }}>
           <IconButton
             aria-label="expand row"
@@ -155,7 +155,7 @@ const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
           ) : null}
         </TableCell>
       </TableRow>
-      <TableRow>
+      <TableRow sx={{ backgroundColor: "white" }}>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 2, gap: "10px" }}>
@@ -175,10 +175,14 @@ const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
               <Table
                 size="small"
                 aria-label="purchases"
-                sx={{ borderTop: 1, borderColor: "rgba(0, 0, 0, 0.1)" }}
+                sx={{
+                  borderTop: 1,
+                  borderColor: "rgba(0, 0, 0, 0.1)",
+                  width: "100%",
+                }}
               >
                 <TableHead>
-                  <TableRow>
+                  <TableRow sx={{ backgroundColor: "white" }}>
                     <TableCell align="left" sx={{ fontWeight: "bold" }}>
                       Nama
                     </TableCell>
@@ -195,7 +199,7 @@ const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
                   {row.lampiran
                     .filter((row) => row.deleted_at === null)
                     .map((item) => (
-                      <TableRow key={item.id}>
+                      <TableRow key={item.id} sx={{ backgroundColor: "white" }}>
                         <TableCell align="left">{item.nama}</TableCell>
                         <TableCell align="left">{item.jumlah}</TableCell>
                         <TableCell align="left">

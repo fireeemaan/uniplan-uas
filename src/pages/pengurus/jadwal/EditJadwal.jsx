@@ -50,10 +50,10 @@ const EditJadwal = ({ setApiResponse, setActiveButton, jabatan }) => {
     console.log(idKegiatan);
 
     axios
-      .get("https://222410101074.pbw.ilkom.unej.ac.id/api/api/lampiran.php", {
+      .get("https://222410101074.pbw.ilkom.unej.ac.id/api/api/kegiatan.php", {
         params: {
           action: "getById",
-          id_lampiran: idKegiatan,
+          id_kegiatan: idKegiatan,
         },
       })
       .then((response) => {
@@ -64,6 +64,7 @@ const EditJadwal = ({ setApiResponse, setActiveButton, jabatan }) => {
         } else {
           setIsLoaded(true);
           setKegiatan(response.data.data.kegiatan);
+          // console.log(response.data);
         }
       })
       .catch((error) => {
