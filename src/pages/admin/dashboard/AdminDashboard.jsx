@@ -10,7 +10,8 @@ import Navbar from "../../../components/Navbar";
 import toast from "react-hot-toast";
 import MahasiswaPages from "../ukmormawa/MahasiswaPages";
 import MahasiswaUkmPages from "../ukmormawa/MahasiswaUkmPages";
-import EditUKMOrmawa from "../ukmormawa/EditUKMOrmawa";
+import Statistik from "../statistik/Statistik";
+// import EditUKMOrmawa from "../ukmormawa/EditUKMOrmawa";
 
 function AdminDashboard() {
   const userData = JSON.parse(sessionStorage.getItem("userData"));
@@ -153,6 +154,11 @@ function AdminDashboard() {
               {activeButton === "mahasiswa-ukm" && (
                 <div className="flex flex-col mt-3">
                   <MahasiswaUkmPages setBackType={setBackType} />
+                </div>
+              )}
+              {activeButton === "statistik" && (
+                <div className="flex flex-col mt-3 min-h-[27rem] h-full">
+                  <Statistik />
                 </div>
               )}
             </div>
