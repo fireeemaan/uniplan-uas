@@ -2,6 +2,7 @@
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
+import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
 import React from "react";
 import axios from "axios";
@@ -20,7 +21,9 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [apiResponse, setApiResponse] = useState({});
-  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [cancelSource, setCancelSource] = useState(null);
+  // const [error, setError] = useState("");
 
   const handleBack = () => {
     navigate("/");
@@ -55,15 +58,35 @@ function LoginPage() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    if (!isLoading) {
+      setIsLoading(true);
+    }
+
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
+    setCancelSource(source);
+
+    const timeout = setTimeout(() => {
+      source.cancel("Request timed out");
+      toast.error("Request Timed Out");
+      setIsLoading(false);
+    }, 5000);
+
     axios
-      .post("https://222410101074.pbw.ilkom.unej.ac.id/api/api/auth.php", {
-        action: "login",
-        username: username,
-        password: password,
-      })
+      .post(
+        "https://222410101074.pbw.ilkom.unej.ac.id/api/api/auth.php",
+        {
+          action: "login",
+          username: username,
+          password: password,
+        },
+        { cancelToken: source.token }
+      )
       .then((response) => {
+        clearTimeout(timeout);
         console.log(response.data);
         if (response.data.status === "success") {
+          setIsLoading(false);
           sessionStorage.setItem("loggedIn", true);
           sessionStorage.setItem(
             "userData",
@@ -72,10 +95,12 @@ function LoginPage() {
           // window.location.href = "/homepage";
           navigate("/homepage");
         } else {
+          setIsLoading(false);
           setApiResponse(response.data);
         }
       })
       .catch((error) => {
+        clearTimeout(timeout);
         console.error(error);
       });
   };
@@ -140,8 +165,18 @@ function LoginPage() {
                       ),
                     }}
                   />
-                  <Button type="submit" variant="contained">
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={isLoading}
+                  >
                     Submit
+                    {isLoading && (
+                      <CircularProgress
+                        size={25}
+                        sx={{ position: "absolute" }}
+                      />
+                    )}
                   </Button>
                 </form>
               </div>

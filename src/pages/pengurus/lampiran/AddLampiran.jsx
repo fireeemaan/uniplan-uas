@@ -6,10 +6,9 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { Icon, IconButton } from "@mui/material";
 
-const userData = JSON.parse(sessionStorage.getItem("userData"));
-const id_user = userData?.userData.id;
-
 const AddLampiran = ({ setApiResponse, setActiveButton }) => {
+  const userData = JSON.parse(sessionStorage.getItem("userData"));
+  const id_user = userData?.userData.id;
   const [inputs, setInputs] = useState({});
 
   const { name, idPeminjaman } = useParams();

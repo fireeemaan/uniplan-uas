@@ -11,10 +11,9 @@ import dayjs from "dayjs";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
-const userData = JSON.parse(sessionStorage.getItem("userData"));
-const id_user = userData?.userData.id;
-
 const EditJadwal = ({ setApiResponse, setActiveButton, jabatan }) => {
+  const userData = JSON.parse(sessionStorage.getItem("userData"));
+  const id_user = userData?.userData.id;
   const [inputs, setInputs] = useState({});
   const [kegiatan, setKegiatan] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);

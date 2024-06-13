@@ -13,10 +13,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import Checkbox from "@mui/material/Checkbox";
 import { Icon, IconButton } from "@mui/material";
 
-const userData = JSON.parse(sessionStorage.getItem("userData"));
-const id_user = userData?.userData.id;
-
 const AddJadwal = ({ id_ukmormawa, setApiResponse, setActiveButton }) => {
+  const userData = JSON.parse(sessionStorage.getItem("userData"));
+  const id_user = userData?.userData.id;
+
   const [inputs, setInputs] = useState({});
 
   const [noTimeEnd, setNoTimeEnd] = useState(false);

@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Tabs, Tab, Button, Typography, Tooltip } from "@mui/material";
+import {
+  Tabs,
+  Tab,
+  Button,
+  Typography,
+  Tooltip,
+  Skeleton,
+  Stack,
+  Backdrop,
+  CircularProgress,
+} from "@mui/material";
 import axios from "axios";
 import classNames from "classnames";
 import TableData from "../components/TableData";
@@ -16,16 +26,14 @@ import EditPeminjaman from "./pengurus/peminjaman/EditPeminjaman";
 import AddLampiran from "./pengurus/lampiran/AddLampiran";
 import EditLampiran from "./pengurus/lampiran/EditLampiran";
 
-const userData = JSON.parse(sessionStorage.getItem("userData"));
-const id = userData?.userData.id;
-const id_role = userData?.userData.id_roles;
-let ukmName = "";
+let ukmormawaName = "";
 let jabatan = "";
 let abbrevation = "";
 let idUkm = "";
 
 const DaftarAnggota = ({ idUkm }) => {
   const [anggota, setAnggota] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { name } = useParams();
 
@@ -43,6 +51,7 @@ const DaftarAnggota = ({ idUkm }) => {
         );
         console.log(response.data);
         setAnggota(response.data.data.anggota);
+        setIsLoading(false);
       } catch (error) {
         console.error(error);
       }
@@ -92,6 +101,10 @@ const DaftarAnggota = ({ idUkm }) => {
 
   return (
     <div className="grid grid-cols-3 grid-flow-row gap-3 w-full justify-center">
+      <Backdrop open={isLoading} sx={{ backgroundColor: "rgba(0, 0, 0, 0.1)" }}>
+        <CircularProgress />
+      </Backdrop>
+
       {anggota.length > 0 ? (
         anggota.map((anggota) => (
           <div key={anggota.id}>
@@ -117,10 +130,15 @@ const DaftarAnggota = ({ idUkm }) => {
 };
 
 const UkmPages = () => {
+  const userData = JSON.parse(sessionStorage.getItem("userData"));
+  const id = userData?.userData.id;
+  const id_role = userData?.userData.id_roles;
   const [activeButton, setActiveButton] = useState("home");
   const [isEdited, setIsEdited] = useState(false);
   const [ukmUser, setUkmUser] = useState([]);
   const [ukm, setUkm] = useState([]);
+  const [ukmName, setUkmName] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const { name, idKegiatan, idPeminjaman, action, actionLampiran } =
     useParams();
 
@@ -135,6 +153,7 @@ const UkmPages = () => {
 
   // const ukmData = JSON.parse(sessionStorage.getItem("ukm"));
   // console.log(id_role);
+
   console.log(ukmUser);
   let findUkm;
   if (id_role === "1") {
@@ -153,14 +172,23 @@ const UkmPages = () => {
     // console.log(findUkm.jabatan);
     idUkm = findUkm.id;
     abbrevation = findUkm.singkatan;
-    ukmName = findUkm.nama;
+    ukmormawaName = findUkm.nama;
     jabatan = findUkm.jabatan;
   }
+
+  useEffect(() => {
+    if (findUkm) {
+      setIsLoading(false);
+    }
+    setUkmName(ukmormawaName);
+  }, [ukmormawaName]);
+
   // console.log(idUkm);
   // console.log(jabatan);
   // console.log(ukmName);
 
   const handleBack = () => {
+    ukmormawaName = "";
     navigate("/ukm-ormawa");
   };
 
@@ -238,7 +266,7 @@ const UkmPages = () => {
             textTransform: "none",
           }}
         >
-          Home
+          Jadwal Kegiatan
         </Button>
         <Button
           variant={activeButton === "anggota" ? "contained" : "outlined"}
@@ -277,7 +305,7 @@ const UkmPages = () => {
             textTransform: "none",
           }}
         >
-          Home
+          Jadwal Kegiatan
         </Button>
         <Button
           variant={activeButton === "anggota" ? "contained" : "outlined"}
@@ -310,8 +338,12 @@ const UkmPages = () => {
               <h1>Back To Home</h1>
             </Button>
           </div>
+          {isLoading ? (
+            <Skeleton variant="rounded" width={500} height={30}></Skeleton>
+          ) : (
+            <h1 className="text-2xl font-bold text-center">{ukmName}</h1>
+          )}
 
-          <h1 className="text-2xl font-bold text-center">{ukmName}</h1>
           {buttons}
           <div className="flex flex-col bg-slate-100 w-full rounded-lg px-12 pb-10 pt-5 items-center">
             {activeButton === "home" && (

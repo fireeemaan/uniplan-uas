@@ -4,7 +4,7 @@ import LandingPage from "../pages/LandingPage";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import Homepage from "../pages/Homepage";
-import AdminDashboard from "../pages/admin/AdminDashboard";
+import AdminDashboard from "../pages/admin/dashboard/AdminDashboard";
 import DaftarUkm from "../pages/DaftarUkm";
 import UkmPages from "../pages/UkmPages";
 import Logout from "../pages/Logout";

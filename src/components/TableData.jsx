@@ -20,6 +20,8 @@ import {
   Typography,
   IconButton,
   Tooltip,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 
 const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
@@ -143,7 +145,7 @@ const Row = ({ props, fetchData, setApiResponse, jabatan }) => {
 
 const TableData = ({ setApiResponse, jabatan }) => {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -162,7 +164,7 @@ const TableData = ({ setApiResponse, jabatan }) => {
       );
       console.log(response.data.data);
       setData(response.data.data.jadwal);
-      setLoading(false);
+      setIsLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -172,46 +174,51 @@ const TableData = ({ setApiResponse, jabatan }) => {
     fetchData();
   }, [name]);
   return (
-    <TableContainer sx={{ borderRadius: "12px" }}>
-      <Table sx={{ maxWidth: 1000, minWidth: 1000 }}>
-        <TableHead
-          sx={{
-            "& .MuiTableCell-root": { color: "black", fontWeight: "bold" },
-            backgroundColor: "#f2f2f2",
-          }}
-        >
-          <TableRow>
-            <TableCell />
-            <TableCell align="left">Nama Kegiatan</TableCell>
-            <TableCell align="left">Tanggal</TableCell>
-            <TableCell align="left">Tempat</TableCell>
-            <TableCell align="left">Waktu</TableCell>
-            <TableCell align="left" width={10}></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.filter((row) => row.deleted_at === null).length > 0 ? (
-            data
-              .filter((row) => row.deleted_at === null)
-              .map((row) => (
-                <Row
-                  key={row.id}
-                  props={{ row }}
-                  fetchData={fetchData}
-                  setApiResponse={setApiResponse}
-                  jabatan={jabatan}
-                />
-              ))
-          ) : (
-            <TableRow sx={{ backgroundColor: "white" }}>
-              <TableCell colSpan={6} align="center">
-                <h1 className="text-lg font-bold">Tidak Ada Kegiatan</h1>
-              </TableCell>
+    <>
+      <Backdrop open={isLoading} sx={{ backgroundColor: "rgba(0, 0, 0, 0.1)" }}>
+        <CircularProgress />
+      </Backdrop>
+      <TableContainer sx={{ borderRadius: "12px" }}>
+        <Table sx={{ maxWidth: 1000, minWidth: 1000 }}>
+          <TableHead
+            sx={{
+              "& .MuiTableCell-root": { color: "black", fontWeight: "bold" },
+              backgroundColor: "#f2f2f2",
+            }}
+          >
+            <TableRow>
+              <TableCell />
+              <TableCell align="left">Nama Kegiatan</TableCell>
+              <TableCell align="left">Tanggal</TableCell>
+              <TableCell align="left">Tempat</TableCell>
+              <TableCell align="left">Waktu</TableCell>
+              <TableCell align="left" width={10}></TableCell>
             </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {data.filter((row) => row.deleted_at === null).length > 0 ? (
+              data
+                .filter((row) => row.deleted_at === null)
+                .map((row) => (
+                  <Row
+                    key={row.id}
+                    props={{ row }}
+                    fetchData={fetchData}
+                    setApiResponse={setApiResponse}
+                    jabatan={jabatan}
+                  />
+                ))
+            ) : (
+              <TableRow sx={{ backgroundColor: "white" }}>
+                <TableCell colSpan={6} align="center">
+                  <h1 className="text-lg font-bold">Tidak Ada Kegiatan</h1>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 };
 
