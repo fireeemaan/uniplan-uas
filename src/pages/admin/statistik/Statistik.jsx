@@ -237,7 +237,7 @@ const MemberChart = ({ dataProdi }) => {
 
 const Statistik = () => {
   return (
-    <div className="grid grid-cols-6 grid-rows-4 gap-4 grid-flow-row w-full rounded-lg justify-center items-center">
+    <div className="grid grid-cols-6 grid-rows-2 gap-4 grid-flow-row w-full rounded-lg justify-center items-center">
       <VisitorStat />
       <div className="w-full h-full col-span-2 bg-white p-5 rounded-lg shadow-lg">
         <Typography
