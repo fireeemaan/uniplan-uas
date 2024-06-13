@@ -70,7 +70,7 @@ function getById($id)
 function getByName($ukmName)
 {
     global $conn;
-    $sql = "SELECT k.* FROM kegiatan k JOIN ukmormawa u ON k.id_ukmormawa = u.id WHERE u.singkatan = ?";
+    $sql = "SELECT k.* FROM kegiatan k JOIN ukmormawa u ON k.id_ukmormawa = u.id WHERE u.singkatan = ? ORDER BY DATEDIFF(tanggal, CURDATE())";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('s', $ukmName);
     $stmt->execute();
@@ -129,6 +129,12 @@ function addJadwal()
         $tempat = isset($data['tempat']) ? $data['tempat'] : '';
         $deskripsi = isset($data['deskripsi']) ? $data['deskripsi'] : '';
         $created_by = isset($data['id_user']) ? $data['id_user'] : '';
+
+        if (!$id_ukmormawa || !$nama_kegiatan || !$tanggal || !$waktu_mulai || !$tempat || !$created_by) {
+            echo createResponse('error', 'Please fill all the required input fields');
+            exit;
+        }
+
 
         saveJadwal($id_ukmormawa, $nama_kegiatan, $tanggal, $waktu_mulai, $waktu_selesai, $tempat, $deskripsi, $created_by);
         // echo createResponse('success', 'Data added successfully');

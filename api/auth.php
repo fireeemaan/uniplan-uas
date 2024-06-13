@@ -51,15 +51,15 @@ function validateNIM($nim)
 
 }
 
-function saveRegister($nama, $nim, $no_hp, $username, $password, $email, $ukmormawa)
+function saveRegister($nama, $nim, $prodi, $no_hp, $username, $password, $email, $ukmormawa)
 {
     global $conn;
 
     $created_at = date('Y-m-d H:i:s');
 
-    $sql_users = "INSERT INTO users SET nama = ?, nim = ?, no_hp = ?, email = ?, id_roles = 1, created_at = ?;";
+    $sql_users = "INSERT INTO users SET nama = ?, nim = ?, id_prodi = ?, no_hp = ?, email = ?, id_roles = 1, created_at = ?;";
     $stmt_users = $conn->prepare($sql_users);
-    $stmt_users->bind_param('sssss', $nama, $nim, $no_hp, $email, $created_at);
+    $stmt_users->bind_param('ssisss', $nama, $nim, $prodi, $no_hp, $email, $created_at);
     $stmt_users->execute();
 
     $id_user = $conn->insert_id;
@@ -113,6 +113,7 @@ function login()
             if ($verify) {
                 session_start();
                 $_SESSION['credentials'] = $result;
+                $_SESSION['loggedIn'] = true;
 
 
                 $id_user = $result['id_user'];
@@ -142,18 +143,19 @@ function register()
         if ($data) {
             $name = isset($data['name']) ? $data['name'] : '';
             $nim = isset($data['nim']) ? $data['nim'] : '';
+            $prodi = isset($data['prodi']) ? $data['prodi'] : '';
             $no_hp = isset($data['phone']) ? $data['phone'] : '';
             $username = isset($data['username']) ? $data['username'] : '';
             $password = isset($data['password']) ? $data['password'] : '';
             $email = isset($data['email']) ? $data['email'] : '';
             $ukmormawa = isset($data['ukmormawa']) ? $data['ukmormawa'] : '';
 
-            if (!validateInput($username) || !validateInput($password) || !validateInput($email) || !validateInput($name) || !validateInput($nim) || !validateInput($no_hp)) {
+            if (!validateInput($username) || !validateInput($prodi) || !validateInput($password) || !validateInput($email) || !validateInput($name) || !validateInput($nim) || !validateInput($no_hp)) {
                 echo createResponse('error', 'Invalid input');
                 exit;
             }
 
-            if (empty($username) || empty($password) || empty($email) || empty($name) || empty($nim) || empty($no_hp)) {
+            if (empty($username) || empty($password) || empty($prodi) || empty($email) || empty($name) || empty($nim) || empty($no_hp)) {
                 echo createResponse('error', 'Username, password, and email are required');
                 exit;
             }
@@ -178,13 +180,37 @@ function register()
 
 
 
-            saveRegister($name, $nim, $no_hp, $username, $hashedPassword, $email, $ukmormawa);
+            saveRegister($name, $nim, $prodi, $no_hp, $username, $hashedPassword, $email, $ukmormawa);
 
         } else {
             echo createResponse('error', 'Register failed');
         }
 
     }
+}
+
+function addVisitor()
+{
+    global $conn;
+
+    $ip_address = $_SERVER['REMOTE_ADDR'];
+
+    $sql_check = "SELECT COUNT(*) as count FROM visitor_log WHERE ip_address = ? AND time > (NOW() - INTERVAL 1 MINUTE)";
+    $stmt_check = $conn->prepare($sql_check);
+    $stmt_check->bind_param('s', $ip_address);
+    $stmt_check->execute();
+    $result = $stmt_check->get_result();
+    $result = $result->fetch_assoc();
+
+    if ($result['count'] == 0) {
+        $sql = "INSERT INTO visitor_log SET ip_address = ?";
+        $stmt = $conn->prepare($sql);
+
+        $stmt->bind_param('s', $ip_address);
+        $stmt->execute();
+    }
+
+
 }
 
 
@@ -200,6 +226,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 break;
             case 'register':
                 register();
+                break;
+            case 'addVisitor':
+                addVisitor();
                 break;
             default:
                 echo createResponse('error', 'Invalid action');
