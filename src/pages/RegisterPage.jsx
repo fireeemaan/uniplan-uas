@@ -126,8 +126,9 @@ function RegisterPage() {
       });
   };
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-black">
-      <div
+    <div className="flex flex-col items-center justify-center h-screen bg-blue-500">
+      <div className="size-[29rem] rounded-full blur-[100px] bg-white opacity-35 absolute"></div>
+      {/* <div
         className="absolute inset-0 z-0 blur-sm"
         style={{
           backgroundImage: `url(${bgImage})`,
@@ -139,7 +140,7 @@ function RegisterPage() {
           backgroundColor: "black",
           opacity: 0.5,
         }}
-      ></div>
+      ></div> */}
       <div className="flex flex-col gap-2 z-10">
         <button
           className="flex flex-row items-center cursor-pointer gap-1"

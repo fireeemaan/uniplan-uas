@@ -12,6 +12,7 @@ import { Alert, IconButton } from "@mui/material";
 import toast from "react-hot-toast";
 import { FaAngleLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import bgImage from "../assets/bg-cover.png";
 
 function LoginPage() {
@@ -104,10 +105,12 @@ function LoginPage() {
         console.error(error);
       });
   };
+
   return (
     <>
-      <div className="flex flex-col items-center w-full justify-center h-screen bg-black">
-        <div
+      <div className="flex flex-col items-center w-full justify-center h-screen bg-blue-500">
+        <div className="size-[29rem] rounded-full blur-[100px] bg-white opacity-35 absolute"></div>
+        {/* <div
           className="absolute inset-0 z-0 blur-sm"
           style={{
             backgroundImage: `url(${bgImage})`,
@@ -119,7 +122,7 @@ function LoginPage() {
             backgroundColor: "black",
             opacity: 0.5,
           }}
-        ></div>
+        ></div> */}
         <div className="flex flex-col gap-2 z-10">
           <button
             className="flex flex-row items-center cursor-pointer gap-1"
