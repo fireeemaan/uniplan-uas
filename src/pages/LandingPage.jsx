@@ -27,7 +27,7 @@ function LandingPage() {
   const upDownAnimation = {
     y: ["0%", "10%", "0%"],
     transition: {
-      duration: 10,
+      duration: 8,
       ease: "easeInOut",
       repeat: Infinity,
       delay: randomDelay(),
